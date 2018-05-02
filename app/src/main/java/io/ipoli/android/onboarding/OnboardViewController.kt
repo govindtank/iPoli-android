@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
-import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import io.ipoli.android.R
 import io.ipoli.android.common.AppState
 import io.ipoli.android.common.BaseViewStateReducer
@@ -17,7 +16,6 @@ import io.ipoli.android.common.redux.android.BaseViewController
 import io.ipoli.android.common.redux.android.ReduxViewController
 import io.ipoli.android.common.view.anim.TypewriterTextAnimator
 import io.ipoli.android.common.view.enterFullScreen
-import io.ipoli.android.repeatingquest.add.AddRepeatingQuestViewController
 import kotlinx.android.synthetic.main.controller_add_repeating_quest.view.*
 import kotlinx.android.synthetic.main.controller_onboard_story.view.*
 
@@ -113,6 +111,10 @@ class OnboardViewController(args: Bundle? = null) :
             savedViewState: Bundle?
         ): View {
             val view = container.inflate(R.layout.controller_onboard_story)
+            view.storyTrees.setAnimation("onboarding_trees.json")
+            view.storyStars.setAnimation("onboarding_stars.json")
+            view.storyTrees.playAnimation()
+            view.storyStars.playAnimation()
             return view
         }
 
@@ -120,8 +122,10 @@ class OnboardViewController(args: Bundle? = null) :
             super.onAttach(view)
             TypewriterTextAnimator.of(
                 view.storyText,
-                "The days were getting darker, procrastination started winning more and more battles. One day, something really mesmerising came down from the clouds."
+                "The days were getting darker. Procrastination started winning more and more battles. One day, something really mesmerising came down from the clouds."
             ).start()
+
+
         }
 
         override fun render(state: OnboardViewState, view: View) {
