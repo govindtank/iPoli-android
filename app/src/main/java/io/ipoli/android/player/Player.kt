@@ -23,7 +23,7 @@ data class Player(
     override val id: String = "",
     val schemaVersion: Int = Constants.SCHEMA_VERSION,
     val username: String?,
-    val displayName: String,
+    val displayName: String?,
     val level: Int = 1,
     val coins: Int = Constants.DEFAULT_PLAYER_COINS,
     val gems: Int = Constants.DEFAULT_PLAYER_GEMS,
