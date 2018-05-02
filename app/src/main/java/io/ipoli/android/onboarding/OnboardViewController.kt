@@ -113,8 +113,10 @@ class OnboardViewController(args: Bundle? = null) :
             val view = container.inflate(R.layout.controller_onboard_story)
             view.storyTrees.setAnimation("onboarding_trees.json")
             view.storyStars.setAnimation("onboarding_stars.json")
+            view.storySnail.setAnimation("onboarding_snail.json")
             view.storyTrees.playAnimation()
             view.storyStars.playAnimation()
+            view.storySnail.playAnimation()
             return view
         }
 
@@ -124,7 +126,6 @@ class OnboardViewController(args: Bundle? = null) :
                 view.storyText,
                 "The days were getting darker. Procrastination started winning more and more battles. One day, something really mesmerising came down from the clouds."
             ).start()
-
 
         }
 

@@ -40,6 +40,21 @@
         android:layout_height="match_parent"
         android:background="@drawable/story_background" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/storySnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="212dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_loop="true" />
+
 
     <TextView
         android:id="@+id/storyText"
