@@ -24,9 +24,7 @@ class TypewriterTextAnimator private constructor(
             textView: TextView,
             text: String,
             typeSpeed: Int = DEFAULT_TYPE_SPEED
-        ): TypewriterTextAnimator {
-            return TypewriterTextAnimator(textView, text, typeSpeed)
-        }
+        ) = TypewriterTextAnimator(textView, text, typeSpeed)
     }
 
     override fun isRunning() = isRunning

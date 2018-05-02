@@ -72,7 +72,6 @@ class QuestViewController : ReduxViewController<QuestAction, QuestViewState, Que
         this.questId = questId
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup,
@@ -126,7 +125,6 @@ class QuestViewController : ReduxViewController<QuestAction, QuestViewState, Que
         })
 
         view.editQuest.setOnClickListener {
-//            exitFullScreen()
             val fadeChangeHandler = FadeChangeHandler()
             pushWithRootRouter(
                 RouterTransaction.with(

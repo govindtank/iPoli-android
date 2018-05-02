@@ -19,7 +19,6 @@ import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import io.ipoli.android.common.AppState
-import io.ipoli.android.common.LoadDataAction
 import io.ipoli.android.common.di.Module
 import io.ipoli.android.common.home.HomeAction
 import io.ipoli.android.common.home.HomeViewController
@@ -27,6 +26,7 @@ import io.ipoli.android.common.redux.Action
 import io.ipoli.android.common.redux.Dispatcher
 import io.ipoli.android.common.redux.SideEffectHandler
 import io.ipoli.android.common.view.playerTheme
+import io.ipoli.android.onboarding.OnboardViewController
 import io.ipoli.android.pet.PetViewController
 import io.ipoli.android.player.auth.AuthViewController
 import io.ipoli.android.quest.schedule.addquest.AddQuestViewController
@@ -36,9 +36,7 @@ import io.ipoli.android.store.powerup.AndroidPowerUp
 import io.ipoli.android.store.powerup.buy.BuyPowerUpDialogController
 import io.ipoli.android.store.powerup.middleware.ShowBuyPowerUpAction
 import io.ipoli.android.tag.show.TagAction
-import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 import org.threeten.bp.LocalDate
 import space.traversal.kapsule.Injects
@@ -96,24 +94,26 @@ class MainActivity : AppCompatActivity(), Injects<Module>, SideEffectHandler<App
         router.setPopsLastView(true)
         inject(myPoliApp.module(this))
 
-        launch(CommonPool) {
-            val hasPlayer = playerRepository.hasPlayer()
-            if (!hasPlayer) {
-                withContext(UI) {
-                    router.setRoot(RouterTransaction.with(AuthViewController()))
-                }
-            } else {
-                val p = playerRepository.find()!!
-                withContext(UI) {
-                    if (p.isLoggedIn() && p.username.isNullOrEmpty()) {
-                        router.setRoot(RouterTransaction.with(AuthViewController()))
-                    } else {
-                        stateStore.dispatch(LoadDataAction.All)
-                        startApp()
-                    }
-                }
-            }
-        }
+        router.setRoot(RouterTransaction.with(OnboardViewController()))
+
+//        launch(CommonPool) {
+//            val hasPlayer = playerRepository.hasPlayer()
+//            if (!hasPlayer) {
+//                withContext(UI) {
+//                    router.setRoot(RouterTransaction.with(AuthViewController()))
+//                }
+//            } else {
+//                val p = playerRepository.find()!!
+//                withContext(UI) {
+//                    if (p.isLoggedIn() && p.username.isNullOrEmpty()) {
+//                        router.setRoot(RouterTransaction.with(AuthViewController()))
+//                    } else {
+//                        stateStore.dispatch(LoadDataAction.All)
+//                        startApp()
+//                    }
+//                }
+//            }
+//        }
     }
 
     private fun startApp() {
