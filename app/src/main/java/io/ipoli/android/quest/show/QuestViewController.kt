@@ -126,7 +126,7 @@ class QuestViewController : ReduxViewController<QuestAction, QuestViewState, Que
         })
 
         view.editQuest.setOnClickListener {
-            exitFullScreen()
+//            exitFullScreen()
             val fadeChangeHandler = FadeChangeHandler()
             pushWithRootRouter(
                 RouterTransaction.with(

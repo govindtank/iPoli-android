@@ -438,9 +438,11 @@ class EditQuestViewController(args: Bundle? = null) :
     private fun renderNote(view: View, state: EditQuestViewState) {
         view.questNote.text = state.noteText
         view.questNote.setOnClickListener {
-            NoteDialogViewController(state.note, { note ->
-                dispatch(EditQuestAction.ChangeNote(note))
-            }).show(router)
+            NoteDialogViewController(
+                note = state.note,
+                resultListener = { note ->
+                    dispatch(EditQuestAction.ChangeNote(note))
+                }).show(router)
         }
     }
 

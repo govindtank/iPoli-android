@@ -190,7 +190,6 @@ class NoteViewController(args: Bundle? = null) :
             })
         }
     }
-
 }
 
 class NoteDialogViewController(args: Bundle? = null) : BaseFullscreenDialogController(args) {
@@ -211,12 +210,21 @@ class NoteDialogViewController(args: Bundle? = null) : BaseFullscreenDialogContr
 
         setChildController(
             view.noteContainer,
-            NoteViewController(note, resultListener, true, { dismiss() })
+            NoteViewController(note, resultListener, true, {
+                dismiss()
+            })
         )
+
 
         view.closeNote.setOnClickListener {
             dismiss()
         }
         return view
     }
+
+    override fun onDetach(view: View) {
+        exitFullScreen()
+        super.onDetach(view)
+    }
+
 }
