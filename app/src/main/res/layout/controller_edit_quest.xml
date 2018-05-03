@@ -59,19 +59,21 @@
 
                 <TextView
                     style="@style/EditSimpleTextViewRow"
-                    android:layout_height="match_parent"
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:clickable="false"
                     android:drawableStart="@drawable/ic_tags_white_24dp"
+                    android:focusable="false"
                     android:text="@string/tags" />
 
                 <TextView
                     android:id="@+id/maxTagsMessage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                     android:text="@string/max_tags_message"
-                    android:textColor="@color/md_light_text_70"/>
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    android:textColor="@color/md_light_text_70" />
 
             </LinearLayout>
 
@@ -90,13 +92,13 @@
                     android:layout_height="wrap_content" />
 
                 <AutoCompleteTextView
-                    style="@style/TagAutocompleteTheme"
                     android:id="@+id/addQuestTag"
+                    style="@style/TagAutocompleteTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    android:maxLines="1"
-                    android:hint="@string/add_tag" />
+                    android:hint="@string/add_tag"
+                    android:maxLines="1" />
 
             </LinearLayout>
 
@@ -108,8 +110,8 @@
 
             <TextView
                 android:id="@+id/questScheduleDate"
-                android:layout_marginTop="16dp"
                 style="@style/EditSimpleTextViewRow"
+                android:layout_marginTop="16dp"
                 android:drawableStart="@drawable/ic_event_white_24dp" />
 
             <View style="@style/EditSimpleDivider" />
@@ -151,22 +153,23 @@
 
             <View style="@style/EditSimpleDivider" />
 
-            <View style="@style/EditSimpleDivider"
-                android:layout_marginTop="60dp"/>
+            <View
+                style="@style/EditSimpleDivider"
+                android:layout_marginTop="60dp" />
 
             <TextView
                 style="@style/EditSimpleTextViewRow"
+                android:layout_height="48dp"
                 android:drawableStart="@drawable/ic_playlist_add_white_24dp"
-                android:text="@string/sub_quests"
-                android:layout_height="48dp"/>
+                android:text="@string/sub_quests" />
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginStart="56dp">
+                android:layout_marginStart="56dp"
+                android:orientation="vertical">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/questSubQuestList"
@@ -209,9 +212,9 @@
             <TextView
                 android:id="@+id/questNote"
                 style="@style/EditSimpleTextViewRow"
+                android:drawableStart="@drawable/ic_note_white_24dp"
                 android:ellipsize="end"
-                android:maxLines="3"
-                android:drawableStart="@drawable/ic_note_white_24dp" />
+                android:maxLines="3" />
 
             <View style="@style/EditSimpleDivider" />
 

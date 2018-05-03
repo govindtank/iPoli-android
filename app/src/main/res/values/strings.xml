@@ -1279,7 +1279,6 @@
     <string name="all_tags">All tags</string>
     <string name="tag_picker_title">Choose some tags</string>
     <string name="allow_overlay_request">Please, allow myPoli to show over other apps for cute Reminders</string>
-
     <string name="predefined_rq_floss">Floss every day</string>
     <string name="predefined_rq_drink_water">Drink 1 glass of water every day</string>
     <string name="predefined_rq_walk_the_dog">Walk the dog every day</string>
@@ -1299,4 +1298,5 @@
     <string name="predefined_rq_learn_spanish">Learn Spanish 5 times per week</string>
     <string name="predefined_rq_learn_english">Learn English 5 times per week</string>
     <string name="predefined_rq_date_night">Plan date night once per week</string>
+    <string name="trial_membership_message">FREE PowerUps for %d days on us (new members only)</string>
 </resources>
