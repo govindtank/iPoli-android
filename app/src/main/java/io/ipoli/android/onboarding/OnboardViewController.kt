@@ -16,14 +16,20 @@ import io.ipoli.android.common.redux.android.BaseViewController
 import io.ipoli.android.common.redux.android.ReduxViewController
 import io.ipoli.android.common.view.anim.TypewriterTextAnimator
 import io.ipoli.android.common.view.enterFullScreen
+import io.ipoli.android.onboarding.OnboardViewState.StateType.INITIAL
+import io.ipoli.android.onboarding.OnboardViewState.StateType.NEXT_PAGE
 import kotlinx.android.synthetic.main.controller_add_repeating_quest.view.*
+import kotlinx.android.synthetic.main.controller_onboard_avatar.view.*
 import kotlinx.android.synthetic.main.controller_onboard_story.view.*
 
-sealed class OnboardAction : Action
+sealed class OnboardAction : Action {
+    object ShowNext : OnboardAction()
+}
 
 data class OnboardViewState(val type: StateType, val adapterPosition: Int) : ViewState {
     enum class StateType {
-        INITIAL
+        INITIAL,
+        NEXT_PAGE
     }
 }
 
@@ -34,12 +40,20 @@ object OnboardReducer : BaseViewStateReducer<OnboardViewState>() {
         subState: OnboardViewState,
         action: Action
     ): OnboardViewState {
-        return subState
+        return when (action) {
+            OnboardAction.ShowNext -> {
+                subState.copy(
+                    type = NEXT_PAGE,
+                    adapterPosition = subState.adapterPosition + 1
+                )
+            }
+            else -> subState
+        }
     }
 
     override fun defaultState() =
         OnboardViewState(
-            OnboardViewState.StateType.INITIAL,
+            INITIAL,
             adapterPosition = 0
         )
 
@@ -65,7 +79,8 @@ class OnboardViewController(args: Bundle? = null) :
 
     override fun render(state: OnboardViewState, view: View) {
         when (state.type) {
-            OnboardViewState.StateType.INITIAL -> {
+            NEXT_PAGE,
+            INITIAL -> {
                 changeChildController(
                     view = view,
                     adapterPosition = state.adapterPosition,
@@ -95,6 +110,7 @@ class OnboardViewController(args: Bundle? = null) :
     private fun createControllerForPosition(position: Int): Controller =
         when (position) {
             STORY_INDEX -> StoryViewController()
+            AVATAR_INDEX -> AvatarViewController()
             else -> throw IllegalArgumentException("Unknown controller position $position")
         }
 
@@ -117,6 +133,8 @@ class OnboardViewController(args: Bundle? = null) :
             view.storyTrees.playAnimation()
             view.storyStars.playAnimation()
             view.storySnail.playAnimation()
+
+            view.storyNext.dispatchOnClick(OnboardAction.ShowNext)
             return view
         }
 
@@ -124,6 +142,37 @@ class OnboardViewController(args: Bundle? = null) :
             super.onAttach(view)
             TypewriterTextAnimator.of(
                 view.storyText,
+                "The days were getting darker. Procrastination started winning more and more battles. One day, something really mesmerising came down from the clouds."
+            ).start()
+
+        }
+
+        override fun render(state: OnboardViewState, view: View) {
+
+        }
+
+    }
+
+    class AvatarViewController(args: Bundle? = null) :
+        BaseViewController<OnboardAction, OnboardViewState>(
+            args
+        ) {
+
+        override val stateKey = OnboardReducer.stateKey
+
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup,
+            savedViewState: Bundle?
+        ): View {
+            val view = container.inflate(R.layout.controller_onboard_avatar)
+            return view
+        }
+
+        override fun onAttach(view: View) {
+            super.onAttach(view)
+            TypewriterTextAnimator.of(
+                view.avatarText,
                 "The days were getting darker. Procrastination started winning more and more battles. One day, something really mesmerising came down from the clouds."
             ).start()
 
