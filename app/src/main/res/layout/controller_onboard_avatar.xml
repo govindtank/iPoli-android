@@ -154,44 +154,19 @@
         app:layout_constraintTop_toTopOf="@+id/topAvatar1"
         app:srcCompat="@drawable/avatar_04" />
 
-    <!--<ImageView-->
-        <!--android:id="@+id/topAvatar2"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_marginStart="8dp"-->
-        <!--android:adjustViewBounds="true"-->
-        <!--android:scaleType="fitCenter"-->
-        <!--app:layout_constraintBottom_toBottomOf="@+id/topAvatar1"-->
-        <!--app:layout_constraintStart_toEndOf="@+id/topAvatar1"-->
-        <!--app:layout_constraintTop_toTopOf="@+id/topAvatar1"-->
-        <!--app:srcCompat="@drawable/avatar_01" />-->
-
-    <!--<ImageView-->
-        <!--android:id="@+id/topAvatar3"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_marginStart="8dp"-->
-        <!--android:adjustViewBounds="true"-->
-        <!--android:scaleType="fitCenter"-->
-        <!--app:layout_constraintBottom_toBottomOf="@+id/topAvatar1"-->
-        <!--app:layout_constraintStart_toEndOf="@+id/topAvatar2"-->
-        <!--app:layout_constraintTop_toTopOf="@+id/topAvatar1"-->
-        <!--app:srcCompat="@drawable/avatar_01" />-->
-
-    <!--<ImageView-->
-        <!--android:id="@+id/topAvatar4"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_marginEnd="8dp"-->
-        <!--android:layout_marginStart="8dp"-->
-        <!--android:adjustViewBounds="true"-->
-        <!--android:scaleType="fitCenter"-->
-        <!--app:layout_constraintBottom_toBottomOf="@+id/topAvatar1"-->
-        <!--app:layout_constraintEnd_toEndOf="@+id/avatarsBoardTop"-->
-        <!--app:layout_constraintStart_toEndOf="@+id/topAvatar3"-->
-        <!--app:layout_constraintTop_toTopOf="@+id/topAvatar1"-->
-        <!--app:layout_constraintVertical_bias="0.0"-->
-        <!--app:srcCompat="@drawable/avatar_01" />-->
-
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/avatarButterflies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="212dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_loop="true" />
 
 </android.support.constraint.ConstraintLayout>

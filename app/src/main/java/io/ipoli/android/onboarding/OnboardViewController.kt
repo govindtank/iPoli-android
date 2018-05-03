@@ -166,6 +166,8 @@ class OnboardViewController(args: Bundle? = null) :
             savedViewState: Bundle?
         ): View {
             val view = container.inflate(R.layout.controller_onboard_avatar)
+            view.avatarButterflies.setAnimation("onboarding_butterflies.json")
+            view.avatarButterflies.playAnimation()
             return view
         }
 
