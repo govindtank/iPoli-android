@@ -694,8 +694,7 @@ class AndroidStateStoreModule : StateStoreModule, Injects<Module> {
                 BucketListSideEffectHandler(),
                 GemPackSideEffectHandler(),
                 StoreSideEffectHandler(),
-                PetSideEffectHandler(),
-                GemPackSideEffectHandler()
+                PetSideEffectHandler()
             ),
             sideEffectHandlerExecutor = CoroutineSideEffectHandlerExecutor(job + CommonPool),
             middleware = setOf(

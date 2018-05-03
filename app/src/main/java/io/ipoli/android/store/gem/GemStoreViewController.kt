@@ -38,6 +38,7 @@ class GemStoreViewController(args: Bundle? = null) :
     override val reducer = GemStoreReducer
 
     private lateinit var checkout: UiCheckout
+    private lateinit var inAppPurchaseManager: InAppPurchaseManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,6 +63,7 @@ class GemStoreViewController(args: Bundle? = null) :
 
         checkout = Checkout.forActivity(activity!!, billing)
         checkout.start()
+        inAppPurchaseManager = createPurchaseManager(checkout)
 
         registerForActivityResult(AndroidInAppPurchaseManager.PURCHASE_REQUEST_CODE)
 
@@ -77,9 +79,9 @@ class GemStoreViewController(args: Bundle? = null) :
     }
 
     override fun onCreateLoadAction() =
-        GemStoreAction.Load(createPurchaseManager())
+        GemStoreAction.Load(createPurchaseManager(checkout))
 
-    private fun createPurchaseManager(): InAppPurchaseManager =
+    private fun createPurchaseManager(checkout: UiCheckout): InAppPurchaseManager =
         AndroidInAppPurchaseManager(checkout, activity!!.resources)
 
     override fun onAttach(view: View) {
@@ -114,9 +116,7 @@ class GemStoreViewController(args: Bundle? = null) :
                             view.basicPackTitle.text = it.title
                             view.basicPackGems.text = "x ${it.gems}"
                             view.basicPackBuy.dispatchOnClick(
-                                GemStoreAction.BuyGemPack(
-                                    it, createPurchaseManager()
-                                )
+                                GemStoreAction.BuyGemPack(it)
                             )
                         }
                         GemPackType.SMART -> {
@@ -124,9 +124,7 @@ class GemStoreViewController(args: Bundle? = null) :
                             view.smartPackTitle.text = it.title
                             view.smartPackGems.text = "x ${it.gems}"
                             view.smartPackBuy.dispatchOnClick(
-                                GemStoreAction.BuyGemPack(
-                                    it, createPurchaseManager()
-                                )
+                                GemStoreAction.BuyGemPack(it)
                             )
                         }
                         GemPackType.PLATINUM -> {
@@ -134,9 +132,7 @@ class GemStoreViewController(args: Bundle? = null) :
                             view.platinumPackTitle.text = it.title
                             view.platinumPackGems.text = "x ${it.gems}"
                             view.platinumPackBuy.dispatchOnClick(
-                                GemStoreAction.BuyGemPack(
-                                    it, createPurchaseManager()
-                                )
+                                GemStoreAction.BuyGemPack(it)
                             )
                         }
                     }
