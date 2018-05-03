@@ -24,7 +24,7 @@ import space.traversal.kapsule.required
  * Created by Polina Zhelyazkova <polina@mypoli.fun>
  * on 4/10/18.
  */
-class EditQuestSideEffectHandler : AppSideEffectHandler() {
+object EditQuestSideEffectHandler : AppSideEffectHandler() {
 
     private val questRepository by required { questRepository }
     private val saveQuestUseCase by required { saveQuestUseCase }

@@ -55,7 +55,7 @@ abstract class AppSideEffectHandler : SideEffectHandler<AppState>,
     }
 }
 
-class BuyPredefinedChallengeSideEffectHandler : AppSideEffectHandler() {
+object BuyPredefinedChallengeSideEffectHandler : AppSideEffectHandler() {
 
     override suspend fun doExecute(action: Action, state: AppState) {
         val challenge = (action as ChallengeListForCategoryAction.BuyChallenge).challenge
@@ -80,7 +80,7 @@ class BuyPredefinedChallengeSideEffectHandler : AppSideEffectHandler() {
     override fun canHandle(action: Action) = action is ChallengeListForCategoryAction.BuyChallenge
 }
 
-class ChangePetSideEffectHandler : AppSideEffectHandler() {
+object ChangePetSideEffectHandler : AppSideEffectHandler() {
 
     private val changePetUseCase by required { changePetUseCase }
 
@@ -91,7 +91,7 @@ class ChangePetSideEffectHandler : AppSideEffectHandler() {
     override fun canHandle(action: Action) = action is PetStoreAction.ChangePet
 }
 
-class BuyPetSideEffectHandler : AppSideEffectHandler() {
+object BuyPetSideEffectHandler : AppSideEffectHandler() {
 
     private val buyPetUseCase by required { buyPetUseCase }
 
@@ -110,7 +110,7 @@ class BuyPetSideEffectHandler : AppSideEffectHandler() {
     override fun canHandle(action: Action) = action is PetStoreAction.BuyPet
 }
 
-class LoadAllDataSideEffectHandler : AppSideEffectHandler() {
+object LoadAllDataSideEffectHandler : AppSideEffectHandler() {
 
     private val tagProvider by required { tagProvider }
     private val playerRepository by required { playerRepository }

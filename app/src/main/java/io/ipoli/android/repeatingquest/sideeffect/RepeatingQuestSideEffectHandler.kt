@@ -20,7 +20,7 @@ import space.traversal.kapsule.required
  * Created by Venelin Valkov <venelin@mypoli.fun>
  * on 03/03/2018.
  */
-class RepeatingQuestSideEffectHandler : AppSideEffectHandler() {
+object RepeatingQuestSideEffectHandler : AppSideEffectHandler() {
 
     private val saveRepeatingQuestUseCase by required { saveRepeatingQuestUseCase }
     private val removeRepeatingQuestUseCase by required { removeRepeatingQuestUseCase }

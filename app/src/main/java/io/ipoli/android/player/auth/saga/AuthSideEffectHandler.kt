@@ -25,7 +25,7 @@ import java.util.regex.Pattern
  * Created by Venelin Valkov <venelin@mypoli.fun>
  * on 02/07/2018.
  */
-class AuthSideEffectHandler : AppSideEffectHandler() {
+object AuthSideEffectHandler : AppSideEffectHandler() {
 
     private val eventLogger by required { eventLogger }
     private val playerRepository by required { playerRepository }

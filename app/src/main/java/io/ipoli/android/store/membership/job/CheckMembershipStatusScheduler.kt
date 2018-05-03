@@ -41,7 +41,7 @@ class CheckMembershipStatusJob : DailyJob(), Injects<Module> {
         }
 
         val billing = Billing(context, object : Billing.DefaultConfiguration() {
-            override fun getPublicKey() = BillingConstants.appPublicKey
+            override fun getPublicKey() = BillingConstants.APP_PUBLIC_KEY
         })
 
         val checkout = Checkout.forApplication(billing)

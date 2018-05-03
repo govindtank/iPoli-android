@@ -135,23 +135,23 @@ class FirestoreRepositoryModule : RepositoryModule, Injects<Module> {
     }
 
     override val playerRepository
-            by required {
-                FirestorePlayerRepository(
-                    database,
-                    job + CommonPool,
-                    sharedPreferences
-                )
-            }
+        by required {
+            FirestorePlayerRepository(
+                database,
+                job + CommonPool,
+                sharedPreferences
+            )
+        }
 
     override val repeatingQuestRepository
-            by required {
-                FirestoreRepeatingQuestRepository(
-                    database,
-                    job + CommonPool,
-                    sharedPreferences,
-                    FirestoreTagRepository(database, job + CommonPool, sharedPreferences)
-                )
-            }
+        by required {
+            FirestoreRepeatingQuestRepository(
+                database,
+                job + CommonPool,
+                sharedPreferences,
+                FirestoreTagRepository(database, job + CommonPool, sharedPreferences)
+            )
+        }
 
     override val challengeRepository by required {
         FirestoreChallengeRepository(
@@ -171,13 +171,13 @@ class FirestoreRepositoryModule : RepositoryModule, Injects<Module> {
     }
 
     override val tagRepository
-            by required {
-                FirestoreTagRepository(
-                    database,
-                    job + CommonPool,
-                    sharedPreferences
-                )
-            }
+        by required {
+            FirestoreTagRepository(
+                database,
+                job + CommonPool,
+                sharedPreferences
+            )
+        }
 
 }
 
@@ -642,7 +642,6 @@ class AndroidPresenterModule : PresenterModule, Injects<Module> {
 
     private val listenForPlayerChangesUseCase by required { listenForPlayerChangesUseCase }
     private val findPetUseCase by required { findPetUseCase }
-    private val timeUnitFormatter by required { timeUnitFormatter }
     private val job by required { job }
 
     override val petDialogPresenter get() = PetDialogPresenter(findPetUseCase, job)
@@ -674,33 +673,32 @@ class AndroidStateStoreModule : StateStoreModule, Injects<Module> {
                 AppDataReducer
             ),
             sideEffectHandlers = setOf(
-                LoadAllDataSideEffectHandler(),
-                AuthSideEffectHandler(),
-                AgendaSideEffectHandler(),
-                BuyPredefinedChallengeSideEffectHandler(),
-                ChangePetSideEffectHandler(),
-                BuyPetSideEffectHandler(),
-                DayViewSideEffectHandler(),
-                RepeatingQuestSideEffectHandler(),
-                ChallengeSideEffectHandler(),
-                CalendarSideEffectHandler(),
-                MembershipSideEffectHandler(),
-                PowerUpSideEffectHandler(),
-                QuestSideEffectHandler(),
-                EditQuestSideEffectHandler(),
-                AvatarSideEffectHandler(),
-                ThemeSideEffectHandler(),
-                TagSideEffectHandler(),
-                BucketListSideEffectHandler(),
-                GemPackSideEffectHandler(),
-                StoreSideEffectHandler(),
-                PetSideEffectHandler(),
-                GemPackSideEffectHandler()
+                LoadAllDataSideEffectHandler,
+                AuthSideEffectHandler,
+                AgendaSideEffectHandler,
+                BuyPredefinedChallengeSideEffectHandler,
+                ChangePetSideEffectHandler,
+                BuyPetSideEffectHandler,
+                DayViewSideEffectHandler,
+                RepeatingQuestSideEffectHandler,
+                ChallengeSideEffectHandler,
+                CalendarSideEffectHandler,
+                MembershipSideEffectHandler,
+                PowerUpSideEffectHandler,
+                QuestSideEffectHandler,
+                EditQuestSideEffectHandler,
+                AvatarSideEffectHandler,
+                ThemeSideEffectHandler,
+                TagSideEffectHandler,
+                BucketListSideEffectHandler,
+                GemPackSideEffectHandler,
+                StoreSideEffectHandler,
+                PetSideEffectHandler
             ),
             sideEffectHandlerExecutor = CoroutineSideEffectHandlerExecutor(job + CommonPool),
             middleware = setOf(
-                LogEventsMiddleWare(),
-                CheckEnabledPowerUpMiddleWare()
+                LogEventsMiddleWare,
+                CheckEnabledPowerUpMiddleWare
             )
         )
     }

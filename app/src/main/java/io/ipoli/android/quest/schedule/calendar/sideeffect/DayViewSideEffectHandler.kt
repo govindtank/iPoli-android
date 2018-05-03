@@ -21,7 +21,7 @@ import io.ipoli.android.repeatingquest.usecase.CreatePlaceholderQuestsForRepeati
 import org.threeten.bp.LocalDate
 import space.traversal.kapsule.required
 
-class DayViewSideEffectHandler : AppSideEffectHandler() {
+object DayViewSideEffectHandler : AppSideEffectHandler() {
     private val saveQuestUseCase by required { saveQuestUseCase }
     private val questRepository by required { questRepository }
     private val findEventsBetweenDatesUseCase by required { findEventsBetweenDatesUseCase }

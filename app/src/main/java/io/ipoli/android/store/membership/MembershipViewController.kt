@@ -55,7 +55,7 @@ class MembershipViewController(args: Bundle? = null) :
 
         val billing = Billing(activity!!, object : Billing.DefaultConfiguration() {
             override fun getPublicKey() =
-                BillingConstants.appPublicKey
+                BillingConstants.APP_PUBLIC_KEY
         })
 
         checkout = Checkout.forUi(

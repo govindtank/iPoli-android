@@ -14,7 +14,7 @@ import space.traversal.kapsule.required
  * Created by Polina Zhelyazkova <polina@mypoli.fun>
  * on 4/29/18.
  */
-class PetSideEffectHandler : AppSideEffectHandler() {
+object PetSideEffectHandler : AppSideEffectHandler() {
 
     private val comparePetItemsUseCase by required { comparePetItemsUseCase }
     private val renamePetUseCase by required { renamePetUseCase }

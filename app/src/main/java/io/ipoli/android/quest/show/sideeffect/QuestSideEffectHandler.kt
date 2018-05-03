@@ -22,7 +22,7 @@ import space.traversal.kapsule.required
 
 data class TimerStartedAction(val otherTimerStopped: Boolean = false) : Action
 
-class QuestSideEffectHandler : AppSideEffectHandler() {
+object QuestSideEffectHandler : AppSideEffectHandler() {
 
     private val questRepository by required { questRepository }
 

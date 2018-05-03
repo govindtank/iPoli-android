@@ -72,25 +72,24 @@ class MainActivity : AppCompatActivity(), Injects<Module>, SideEffectHandler<App
                 .setBackgroundResource(backgroundColor)
         }
 
-        if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.canDrawOverlays(this)) {
-                val intent =
-                    Intent(
-                        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                        Uri.parse("package:$packageName")
-                    )
-                startActivityForResult(intent, 0)
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+            val intent =
+                Intent(
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:$packageName")
+                )
+            startActivityForResult(intent, 0)
+            Toast.makeText(this, R.string.allow_overlay_request, Toast.LENGTH_LONG).show()
         }
 
         incrementAppRun()
 
         router =
-                Conductor.attachRouter(
-                    this,
-                    findViewById(R.id.controllerContainer),
-                    savedInstanceState
-                )
+            Conductor.attachRouter(
+                this,
+                findViewById(R.id.controllerContainer),
+                savedInstanceState
+            )
         router.setPopsLastView(true)
         inject(myPoliApp.module(this))
 
@@ -198,13 +197,13 @@ class MainActivity : AppCompatActivity(), Injects<Module>, SideEffectHandler<App
 
     fun enterFullScreen() {
         window.decorView.systemUiVisibility = (
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                )
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            )
     }
 
     fun exitFullScreen() {
@@ -264,8 +263,8 @@ class MainActivity : AppCompatActivity(), Injects<Module>, SideEffectHandler<App
 
     override fun canHandle(action: Action) =
         action is ShowBuyPowerUpAction
-                || action === TagAction.TagCountLimitReached
-                || action === HomeAction.ShowPlayerSetup
+            || action === TagAction.TagCountLimitReached
+            || action === HomeAction.ShowPlayerSetup
 
     private val isBatteryOptimizationOn: Boolean
         get() {

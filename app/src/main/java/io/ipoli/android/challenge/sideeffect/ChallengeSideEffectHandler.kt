@@ -28,7 +28,7 @@ import space.traversal.kapsule.required
  * Created by Polina Zhelyazkova <polina@mypoli.fun>
  * on 3/7/18.
  */
-class ChallengeSideEffectHandler : AppSideEffectHandler() {
+object ChallengeSideEffectHandler : AppSideEffectHandler() {
 
     private val saveQuestsForChallengeUseCase by required { saveQuestsForChallengeUseCase }
     private val saveChallengeUseCase by required { saveChallengeUseCase }

@@ -7,9 +7,9 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthProvider
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.firestore.DocumentListenOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.MetadataChanges
 import io.ipoli.android.achievement.Achievement
 import io.ipoli.android.challenge.predefined.entity.PredefinedChallenge
 import io.ipoli.android.common.datetime.Time
@@ -50,7 +50,7 @@ interface PlayerRepository : EntityRepository<Player> {
 class FirestorePlayerRepository(
     database: FirebaseFirestore,
     coroutineContext: CoroutineContext,
-    private val sharedPreferences: SharedPreferences
+    sharedPreferences: SharedPreferences
 ) : BaseEntityFirestoreRepository<Player, DbPlayer>(
     database,
     coroutineContext,
@@ -79,11 +79,10 @@ class FirestorePlayerRepository(
 
     override fun isUsernameAvailable(username: String): Boolean = runBlocking {
         suspendCoroutine<Boolean> { continuation ->
-            val opts = DocumentListenOptions().includeMetadataChanges()
             val usernameRef = usernamesReference().document(username.toLowerCase())
             var registration: ListenerRegistration? = null
             registration = usernameRef.addSnapshotListener(
-                opts
+                MetadataChanges.INCLUDE
             ) { snapshot, error ->
 
                 if (error != null) {

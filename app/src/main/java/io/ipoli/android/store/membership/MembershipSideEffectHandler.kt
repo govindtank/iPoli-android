@@ -14,7 +14,7 @@ import space.traversal.kapsule.required
  * Created by Polina Zhelyazkova <polina@mypoli.fun>
  * on 3/16/18.
  */
-class MembershipSideEffectHandler : AppSideEffectHandler() {
+object MembershipSideEffectHandler : AppSideEffectHandler() {
     private val updatePlayerMembershipUseCase by required { updatePlayerMembershipUseCase }
     private val calculateMembershipPlanPriceUseCase by required { calculateMembershipPlanPriceUseCase }
 

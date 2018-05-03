@@ -19,7 +19,7 @@ import io.ipoli.android.repeatingquest.usecase.CreatePlaceholderQuestsForRepeati
 import org.threeten.bp.LocalDate
 import space.traversal.kapsule.required
 
-class AgendaSideEffectHandler : AppSideEffectHandler() {
+object AgendaSideEffectHandler : AppSideEffectHandler() {
 
     private val completeQuestUseCase by required { completeQuestUseCase }
     private val undoCompletedQuestUseCase by required { undoCompletedQuestUseCase }

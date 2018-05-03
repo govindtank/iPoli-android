@@ -1174,11 +1174,11 @@
         <item>Hell</item>
     </string-array>
 
-    <string name="facebook_application_id" translatable="false">1826884640679057</string>
-    <string name="facebook_login_protocol_scheme" translatable="false">fb1826884640679057</string>
+    <string name="facebook_application_id" translatable="false">1609232436065758</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb1609232436065758</string>
 
-    <string name="facebook_app_id">1826884640679057</string>
-    <string name="fb_login_protocol_scheme">fb1826884640679057</string>
+    <string name="facebook_app_id">1609232436065758</string>
+    <string name="fb_login_protocol_scheme">fb1609232436065758</string>
     <string name="login_no_existing_user_error">There is no user with this account</string>
     <string name="login_anonymous_no_existing_user_error">Please, register account</string>
     <string name="loading">Loading…</string>
@@ -1278,4 +1278,5 @@
     <string name="quest_added">Quest added</string>
     <string name="all_tags">All tags</string>
     <string name="tag_picker_title">Choose some tags</string>
+    <string name="allow_overlay_request">Please, allow myPoli to show over other apps for cute Reminders</string>
 </resources>

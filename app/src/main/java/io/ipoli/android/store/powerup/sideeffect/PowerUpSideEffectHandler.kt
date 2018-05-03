@@ -17,7 +17,7 @@ import space.traversal.kapsule.required
 
 data class BuyPowerUpCompletedAction(val result: BuyPowerUpUseCase.Result) : Action
 
-class PowerUpSideEffectHandler : AppSideEffectHandler() {
+object PowerUpSideEffectHandler : AppSideEffectHandler() {
 
     private val buyPowerUpUseCase by required { buyPowerUpUseCase }
 
