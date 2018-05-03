@@ -72,15 +72,14 @@ class MainActivity : AppCompatActivity(), Injects<Module>, SideEffectHandler<App
                 .setBackgroundResource(backgroundColor)
         }
 
-        if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.canDrawOverlays(this)) {
-                val intent =
-                    Intent(
-                        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                        Uri.parse("package:$packageName")
-                    )
-                startActivityForResult(intent, 0)
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+            val intent =
+                Intent(
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:$packageName")
+                )
+            startActivityForResult(intent, 0)
+            Toast.makeText(this, R.string.allow_overlay_request, Toast.LENGTH_LONG).show()
         }
 
         incrementAppRun()
