@@ -1279,4 +1279,24 @@
     <string name="all_tags">All tags</string>
     <string name="tag_picker_title">Choose some tags</string>
     <string name="allow_overlay_request">Please, allow myPoli to show over other apps for cute Reminders</string>
+
+    <string name="predefined_rq_floss">Floss every day</string>
+    <string name="predefined_rq_drink_water">Drink 1 glass of water every day</string>
+    <string name="predefined_rq_walk_the_dog">Walk the dog every day</string>
+    <string name="predefined_rq_play_with_cat">Play with the cat every day</string>
+    <string name="predefined_rq_meditate">Meditate 3 times per week</string>
+    <string name="predefined_rq_read">Read for 30 min 5 times per week</string>
+    <string name="predefined_rq_run">Go for a run 2 times per week</string>
+    <string name="predefined_rq_workout">Workout 3 times per week</string>
+    <string name="predefined_rq_call_parent">Call my parent 2 times per week</string>
+    <string name="predefined_rq_email">Answer emails 5 timer per week</string>
+    <string name="predefined_rq_stretch">Stretch 2 timer per week</string>
+    <string name="predefined_rq_bike">Bike to work 3 times per week</string>
+    <string name="predefined_rq_family_dinner">Family dinner 3 times per week</string>
+    <string name="predefined_rq_call_friend">Call friend 2 times per week</string>
+    <string name="predefined_rq_take_walk">Take a walk 3 times per week</string>
+    <string name="predefined_rq_learn_french">Learn French 5 times per week</string>
+    <string name="predefined_rq_learn_spanish">Learn Spanish 5 times per week</string>
+    <string name="predefined_rq_learn_english">Learn English 5 times per week</string>
+    <string name="predefined_rq_date_night">Plan date night once per week</string>
 </resources>
