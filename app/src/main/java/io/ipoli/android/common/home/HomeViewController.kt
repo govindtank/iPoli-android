@@ -243,17 +243,22 @@ class HomeViewController(args: Bundle? = null) :
     }
 
     override fun render(state: HomeViewState, view: View) {
+
         when (state.type) {
             DATA_LOADED -> {
-                renderSignIn(view, state.showSignIn)
+                val drawerHeaderView = view.navigationView.getHeaderView(0)
+                renderSignIn(drawerHeaderView, state.showSignIn)
                 renderBucketList(state.bucketListQuestCount, view)
-                renderPlayer(view, state)
+                renderPlayer(drawerHeaderView, state)
+                renderLevelProgress(state, view)
                 renderTags(view, state)
             }
 
             PLAYER_CHANGED -> {
-                renderSignIn(view, state.showSignIn)
-                renderPlayer(view, state)
+                val drawerHeaderView = view.navigationView.getHeaderView(0)
+                renderSignIn(drawerHeaderView, state.showSignIn)
+                renderPlayer(drawerHeaderView, state)
+                renderLevelProgress(state, view)
             }
 
             TAGS_CHANGED ->
@@ -268,7 +273,7 @@ class HomeViewController(args: Bundle? = null) :
         val item = view.navigationView.menu.findItem(R.id.bucketList)
 
         item.actionView =
-                LayoutInflater.from(view.context).inflate(R.layout.menu_item_tag_view, null)
+            LayoutInflater.from(view.context).inflate(R.layout.menu_item_tag_view, null)
         item.actionView.questCount.text = bucketListQuestCount.toString()
     }
 
@@ -319,12 +324,12 @@ class HomeViewController(args: Bundle? = null) :
 
     }
 
-    private fun renderPlayer(view: View, state: HomeViewState) {
-        Glide.with(view.context).load(state.avatarImage)
+    private fun renderPlayer(drawerHeaderView: View, state: HomeViewState) {
+        Glide.with(drawerHeaderView.context).load(state.avatarImage)
             .apply(RequestOptions.circleCropTransform())
-            .into(view.playerAvatar)
+            .into(drawerHeaderView.playerAvatar)
 
-        view.playerAvatar.setOnClickListener {
+        drawerHeaderView.playerAvatar.setOnClickListener {
             router.pushController(
                 RouterTransaction.with(AvatarStoreViewController())
                     .pushChangeHandler(VerticalChangeHandler())
@@ -332,24 +337,26 @@ class HomeViewController(args: Bundle? = null) :
             )
         }
 
-        Glide.with(view.context).load(state.petHeadImage)
+        Glide.with(drawerHeaderView.context).load(state.petHeadImage)
             .apply(RequestOptions.circleCropTransform())
-            .into(view.petHeadImage)
+            .into(drawerHeaderView.petHeadImage)
 
 
-        view.petContainer.setOnClickListener {
+        drawerHeaderView.petContainer.setOnClickListener {
             showPet()
         }
 
-        view.drawerPlayerGems.text = state.gemsText
-        view.drawerPlayerCoins.text = state.lifeCoinsText
-        view.drawerCurrentExperience.text = state.experienceText
+        drawerHeaderView.drawerPlayerGems.text = state.gemsText
+        drawerHeaderView.drawerPlayerCoins.text = state.lifeCoinsText
+        drawerHeaderView.drawerCurrentExperience.text = state.experienceText
 
-        view.drawerPlayerTitle.text = state.title(resources!!)
+        drawerHeaderView.drawerPlayerTitle.text = state.title(resources!!)
 
-        val drawable = view.petMood.background as GradientDrawable
+        val drawable = drawerHeaderView.petMood.background as GradientDrawable
         drawable.setColor(colorRes(state.petMoodColor))
+    }
 
+    private fun renderLevelProgress(state: HomeViewState, view: View) {
         view.levelProgress.max = state.maxProgress
         view.levelProgress.progress = state.progress
     }
@@ -372,7 +379,7 @@ class HomeViewController(args: Bundle? = null) :
         )
 
         item.actionView =
-                LayoutInflater.from(view.context).inflate(R.layout.menu_item_tag_view, null)
+            LayoutInflater.from(view.context).inflate(R.layout.menu_item_tag_view, null)
         item.actionView.questCount.text = questCount.toString()
         item.actionView.tag = tagId
 
@@ -391,16 +398,16 @@ class HomeViewController(args: Bundle? = null) :
     }
 
     private fun renderSignIn(
-        view: View,
+        drawerHeaderView: View,
         showSignIn: Boolean
     ) {
         if (showSignIn) {
-            view.navigationView.signIn.visible()
-            view.navigationView.signIn.setOnClickListener {
+            drawerHeaderView.signIn.visible()
+            drawerHeaderView.signIn.setOnClickListener {
                 showAuth()
             }
         } else {
-            view.navigationView.signIn.gone()
+            drawerHeaderView.signIn.gone()
         }
     }
 

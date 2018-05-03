@@ -15,23 +15,29 @@ import space.traversal.kapsule.required
  * on 04/24/2018.
  */
 
-class GemPackSideEffectHandler : AppSideEffectHandler() {
+object GemPackSideEffectHandler : AppSideEffectHandler() {
 
     private val purchaseGemPackUseCase by required { purchaseGemPackUseCase }
     private val convertCoinsToGemsUseCase by required { convertCoinsToGemsUseCase }
 
+    private lateinit var inAppPurchaseManager: InAppPurchaseManager
+
     override suspend fun doExecute(action: Action, state: AppState) {
         when (action) {
 
-            is CurrencyConverterAction.Load ->
-                action.purchaseManager.loadAll {
+            is CurrencyConverterAction.Load -> {
+                inAppPurchaseManager = action.purchaseManager
+                inAppPurchaseManager.loadAll {
                     dispatch(DataLoadedAction.GemPacksLoaded(it))
                 }
+            }
 
-            is GemStoreAction.Load ->
-                action.purchaseManager.loadAll {
+            is GemStoreAction.Load -> {
+                inAppPurchaseManager = action.purchaseManager
+                inAppPurchaseManager.loadAll {
                     dispatch(DataLoadedAction.GemPacksLoaded(it))
                 }
+            }
 
             is CurrencyConverterAction.Convert ->
                 dispatch(
@@ -41,7 +47,7 @@ class GemPackSideEffectHandler : AppSideEffectHandler() {
                 )
 
             is GemStoreAction.BuyGemPack ->
-                action.purchaseManager.purchase(
+                inAppPurchaseManager.purchase(
                     action.gemPack.type,
                     object : InAppPurchaseManager.PurchaseListener {
                         override fun onPurchased() {

@@ -85,11 +85,11 @@ class MainActivity : AppCompatActivity(), Injects<Module>, SideEffectHandler<App
         incrementAppRun()
 
         router =
-                Conductor.attachRouter(
-                    this,
-                    findViewById(R.id.controllerContainer),
-                    savedInstanceState
-                )
+            Conductor.attachRouter(
+                this,
+                findViewById(R.id.controllerContainer),
+                savedInstanceState
+            )
         router.setPopsLastView(true)
         inject(myPoliApp.module(this))
 
@@ -197,13 +197,13 @@ class MainActivity : AppCompatActivity(), Injects<Module>, SideEffectHandler<App
 
     fun enterFullScreen() {
         window.decorView.systemUiVisibility = (
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                )
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            )
     }
 
     fun exitFullScreen() {
@@ -263,8 +263,8 @@ class MainActivity : AppCompatActivity(), Injects<Module>, SideEffectHandler<App
 
     override fun canHandle(action: Action) =
         action is ShowBuyPowerUpAction
-                || action === TagAction.TagCountLimitReached
-                || action === HomeAction.ShowPlayerSetup
+            || action === TagAction.TagCountLimitReached
+            || action === HomeAction.ShowPlayerSetup
 
     private val isBatteryOptimizationOn: Boolean
         get() {

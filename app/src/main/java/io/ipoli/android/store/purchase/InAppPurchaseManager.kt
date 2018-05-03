@@ -1,9 +1,9 @@
 package io.ipoli.android.store.purchase
 
 import android.content.res.Resources
+import io.ipoli.android.R
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import io.ipoli.android.R
 import org.solovyev.android.checkout.*
 import java.util.*
 
@@ -70,6 +70,8 @@ class AndroidInAppPurchaseManager(
             ) { products ->
                 val appProducts = products.get(ProductTypes.IN_APP)
 
+                consumeAlreadyPurchased(appProducts)
+
                 val gemPacks = GEM_PACK_TYPE_TO_SKU.map { (k, v) ->
                     val sku = appProducts.getSku(v)!!
                     val gems = GEM_PACK_TYPE_TO_GEMS[k]!!
@@ -96,6 +98,25 @@ class AndroidInAppPurchaseManager(
                 }
 
                 cb(gemPacks)
+            }
+        }
+    }
+
+    private fun consumeAlreadyPurchased(appProducts: Inventory.Product) {
+        appProducts.purchases.forEach {
+            if (it.state == Purchase.State.PURCHASED) {
+                checkout.whenReady(object : Checkout.EmptyListener() {
+                    override fun onReady(requests: BillingRequests) {
+                        requests.consume(it.token, object : RequestListener<Any> {
+                            override fun onSuccess(result: Any) {
+                            }
+
+                            override fun onError(response: Int, e: java.lang.Exception) {
+                            }
+
+                        })
+                    }
+                })
             }
         }
     }

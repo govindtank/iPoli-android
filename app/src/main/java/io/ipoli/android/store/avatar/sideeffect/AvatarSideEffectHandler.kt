@@ -15,7 +15,7 @@ import space.traversal.kapsule.required
 
 data class BuyAvatarCompletedAction(val result: BuyAvatarUseCase.Result) : Action
 
-class AvatarSideEffectHandler : AppSideEffectHandler() {
+object AvatarSideEffectHandler : AppSideEffectHandler() {
 
     private val buyAvatarUseCase by required { buyAvatarUseCase }
     private val changeAvatarUseCase by required { changeAvatarUseCase }

@@ -15,7 +15,7 @@ import space.traversal.kapsule.required
  * Created by Venelin Valkov <venelin@mypoli.fun>
  * on 03/25/2018.
  */
-class LogEventsMiddleWare : MiddleWare<AppState>, Injects<Module> {
+object LogEventsMiddleWare : MiddleWare<AppState>, Injects<Module> {
 
     private val eventLogger by required { eventLogger }
 

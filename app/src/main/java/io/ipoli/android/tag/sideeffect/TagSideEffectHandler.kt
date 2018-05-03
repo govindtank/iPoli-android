@@ -19,7 +19,7 @@ import space.traversal.kapsule.required
  * Created by Polina Zhelyazkova <polina@mypoli.fun>
  * on 4/5/18.
  */
-class TagSideEffectHandler : AppSideEffectHandler() {
+object TagSideEffectHandler : AppSideEffectHandler() {
     private val saveTagUseCase by required { saveTagUseCase }
     private val questRepository by required { questRepository }
     private val undoCompletedQuestUseCase by required { undoCompletedQuestUseCase }

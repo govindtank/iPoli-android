@@ -13,7 +13,7 @@ import space.traversal.kapsule.required
  */
 data class BuyThemeCompletedAction(val result: BuyThemeUseCase.Result) : Action
 
-class ThemeSideEffectHandler : AppSideEffectHandler() {
+object ThemeSideEffectHandler : AppSideEffectHandler() {
 
     private val buyThemeUseCase by required { buyThemeUseCase }
     private val changeThemeUseCase by required { changeThemeUseCase }

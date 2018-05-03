@@ -14,7 +14,7 @@ import space.traversal.kapsule.required
  * Created by Venelin Valkov <venelin@mypoli.fun>
  * on 03/11/2018.
  */
-class CalendarSideEffectHandler : AppSideEffectHandler() {
+object CalendarSideEffectHandler : AppSideEffectHandler() {
 
     private val calendarRepository by required { calendarRepository }
     private val saveSyncCalendarsUseCase by required { saveSyncCalendarsUseCase }

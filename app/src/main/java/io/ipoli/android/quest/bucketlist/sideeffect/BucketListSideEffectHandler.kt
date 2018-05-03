@@ -8,7 +8,7 @@ import io.ipoli.android.quest.bucketlist.BucketListAction
 import io.ipoli.android.quest.bucketlist.usecase.CreateBucketListItemsUseCase
 import space.traversal.kapsule.required
 
-class BucketListSideEffectHandler : AppSideEffectHandler() {
+object BucketListSideEffectHandler : AppSideEffectHandler() {
 
     private val createBucketListItemsUseCase by required { createBucketListItemsUseCase }
 

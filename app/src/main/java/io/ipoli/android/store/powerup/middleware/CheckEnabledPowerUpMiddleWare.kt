@@ -20,7 +20,7 @@ import io.ipoli.android.tag.list.TagListAction
  */
 data class ShowBuyPowerUpAction(val powerUp: PowerUp.Type) : Action
 
-class CheckEnabledPowerUpMiddleWare : MiddleWare<AppState> {
+object CheckEnabledPowerUpMiddleWare : MiddleWare<AppState> {
 
     override fun execute(
         state: AppState,

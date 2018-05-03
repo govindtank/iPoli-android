@@ -16,7 +16,7 @@ import io.ipoli.android.store.purchase.InAppPurchaseManager
 
 sealed class GemStoreAction : Action {
     data class Load(val purchaseManager: InAppPurchaseManager) : GemStoreAction()
-    data class BuyGemPack(val gemPack: GemPack, val purchaseManager: InAppPurchaseManager) :
+    data class BuyGemPack(val gemPack: GemPack) :
         GemStoreAction()
 
     data class GemPackPurchased(val dogUnlocked: Boolean) : GemStoreAction()

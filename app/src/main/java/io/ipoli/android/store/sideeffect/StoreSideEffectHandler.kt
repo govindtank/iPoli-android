@@ -9,7 +9,7 @@ import io.ipoli.android.player.usecase.BuyColorPackUseCase
 import io.ipoli.android.player.usecase.BuyIconPackUseCase
 import space.traversal.kapsule.required
 
-class StoreSideEffectHandler : AppSideEffectHandler() {
+object StoreSideEffectHandler : AppSideEffectHandler() {
 
     private val buyColorPackUseCase by required { buyColorPackUseCase }
     private val buyIconPackUseCase by required { buyIconPackUseCase }
