@@ -8,8 +8,6 @@ import android.widget.ImageView
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import io.ipoli.android.R
 import io.ipoli.android.common.AppState
 import io.ipoli.android.common.BaseViewStateReducer
@@ -25,6 +23,7 @@ import io.ipoli.android.player.data.AndroidAvatar
 import io.ipoli.android.player.data.Avatar
 import kotlinx.android.synthetic.main.controller_add_repeating_quest.view.*
 import kotlinx.android.synthetic.main.controller_onboard_avatar.view.*
+import kotlinx.android.synthetic.main.controller_onboard_pet.view.*
 import kotlinx.android.synthetic.main.controller_onboard_story.view.*
 
 sealed class OnboardAction : Action {
@@ -142,6 +141,7 @@ class OnboardViewController(args: Bundle? = null) :
         when (position) {
             STORY_INDEX -> StoryViewController()
             AVATAR_INDEX -> AvatarViewController()
+            PET_INDEX ->PetViewController()
             else -> throw IllegalArgumentException("Unknown controller position $position")
         }
 
@@ -204,11 +204,8 @@ class OnboardViewController(args: Bundle? = null) :
             view.avatarSun.playAnimation()
             view.avatarTrees.playAnimation()
 
-//            (view.topAvatarsContainer.children + view.bottomAvatarsContainer.children).forEach {
-//                it.setOnClickListener {
-//                    Timber.d("AAAA click")
-//                }
-//            }
+            view.avatarNext.dispatchOnClick(OnboardAction.ShowNext)
+
             return view
         }
 
@@ -222,9 +219,7 @@ class OnboardViewController(args: Bundle? = null) :
         }
 
         override fun render(state: OnboardViewState, view: View) {
-            Glide.with(view.context).load(AndroidAvatar.valueOf(state.avatar.name).image)
-                .apply(RequestOptions.circleCropTransform())
-                .into(view.avatar)
+            view.avatarImage.setImageResource(AndroidAvatar.valueOf(state.avatar.name).image)
 
             val avatarViews =
                 view.topAvatarsContainer.children + view.bottomAvatarsContainer.children
@@ -236,6 +231,41 @@ class OnboardViewController(args: Bundle? = null) :
                     dispatch(OnboardAction.SelectAvatar(index))
                 }
             }
+
+        }
+
+    }
+
+    class PetViewController(args: Bundle? = null) :
+        BaseViewController<OnboardAction, OnboardViewState>(
+            args
+        ) {
+
+        override val stateKey = OnboardReducer.stateKey
+
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup,
+            savedViewState: Bundle?
+        ): View {
+            val view = container.inflate(R.layout.controller_onboard_pet)
+            view.petSea.setAnimation("onboarding_pet_sea.json")
+            view.petSea.playAnimation()
+
+//            view.storyNext.dispatchOnClick(OnboardAction.ShowNext)
+            return view
+        }
+
+        override fun onAttach(view: View) {
+            super.onAttach(view)
+//            TypewriterTextAnimator.of(
+//                view.storyText,
+//                "The days were getting darker. Procrastination started winning more and more battles. One day, something really mesmerising came down from the clouds."
+//            ).start()
+
+        }
+
+        override fun render(state: OnboardViewState, view: View) {
 
         }
 

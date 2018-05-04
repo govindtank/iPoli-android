@@ -21,11 +21,25 @@
         app:layout_constraintGuide_percent="0.22" />
 
     <android.support.constraint.Guideline
+        android:id="@+id/avatarImageBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.24" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/avatarBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.28" />
+
+    <android.support.constraint.Guideline
         android:id="@+id/avatarTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.08" />
+        app:layout_constraintGuide_percent="0.1" />
 
     <android.support.constraint.Guideline
         android:id="@+id/topBoardBottom"
@@ -275,7 +289,6 @@
         app:layout_constraintStart_toStartOf="@+id/avatarUsernameBackground"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <View
         android:layout_width="5dp"
         android:layout_height="0dp"
@@ -286,6 +299,35 @@
         app:layout_constraintEnd_toEndOf="@+id/avatarUsernameBackground"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/brown_circular_background"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/avatarBottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/avatarTop" />
+
+    <ImageView
+        android:id="@+id/avatarImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:cropToPadding="false"
+        android:paddingTop="8dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/avatarImageBottom"
+        app:layout_constraintEnd_toEndOf="@+id/avatar"
+        app:layout_constraintStart_toStartOf="@+id/avatar"
+        app:layout_constraintTop_toTopOf="@+id/avatarTop"
+        app:srcCompat="@drawable/avatar_03" />
 
     <ImageView
         android:id="@+id/avatarUsernameBackground"
@@ -302,46 +344,70 @@
         app:srcCompat="@drawable/ic_username_background" />
 
     <EditText
+        android:id="@+id/avatarUsername"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="12dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:background="@color/md_white"
         android:hint="@string/username"
+        android:inputType="textPersonName"
+        android:maxLength="20"
+        android:paddingBottom="2dp"
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
+        android:paddingTop="2dp"
         android:textColor="@color/md_dark_text_87"
-        app:layout_constraintBottom_toBottomOf="@+id/avatarUsernameBackground"
         app:layout_constraintEnd_toEndOf="@+id/avatarUsernameBackground"
         app:layout_constraintStart_toStartOf="@+id/avatarUsernameBackground"
         app:layout_constraintTop_toTopOf="@+id/avatarUsernameBackground" />
 
+    <TextView
+        android:id="@+id/usernameLengthHint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="3/15"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:textColor="@color/md_light_text_70"
+        app:layout_constraintBottom_toBottomOf="@+id/avatarUsernameBackground"
+        app:layout_constraintEnd_toEndOf="@+id/avatarUsername"
+        app:layout_constraintTop_toBottomOf="@+id/avatarUsername"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="3/15" />
 
-    <ImageView
-        android:id="@+id/avatar"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+    <TextView
+        android:id="@+id/usernameValidationHint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:adjustViewBounds="true"
-        android:background="@drawable/brown_circular_background"
-        android:padding="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/avatarUsernameBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/avatarTop" />
+        android:layout_marginTop="4dp"
+        android:text="@string/username_format_hint"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:textColor="@color/md_light_text_70"
+        app:layout_constraintBottom_toBottomOf="@+id/avatarUsernameBackground"
+        app:layout_constraintEnd_toStartOf="@+id/usernameLengthHint"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/avatarUsername"
+        app:layout_constraintTop_toBottomOf="@+id/avatarUsername"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <android.support.constraint.Group
-        android:id="@+id/avatars"
+
+
+
+    <Button
+        android:id="@+id/avatarNext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="bottomAvatar3,bottomAvatar1,bottomAvatar4,bottomAvatar2,topAvatar3,topAvatar4,topAvatar1,topAvatar2" />
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/next"
+        android:background="@null"
+        android:textColor="@color/md_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!--<EditText-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="0dp" />-->
 
 
 </android.support.constraint.ConstraintLayout>
