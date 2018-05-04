@@ -250,7 +250,9 @@ class OnboardViewController(args: Bundle? = null) :
         ): View {
             val view = container.inflate(R.layout.controller_onboard_pet)
             view.petSea.setAnimation("onboarding_pet_sea.json")
+            view.petSun.setAnimation("onboarding_sun.json")
             view.petSea.playAnimation()
+            view.petSun.playAnimation()
 
 //            view.storyNext.dispatchOnClick(OnboardAction.ShowNext)
             return view

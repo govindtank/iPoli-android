@@ -16,7 +16,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 
     <com.airbnb.lottie.LottieAnimationView
@@ -44,18 +45,46 @@
         app:layout_constraintTop_toTopOf="@+id/petBackground"
         app:srcCompat="@drawable/ic_doghouse" />
 
-    <!--<android.support.constraint.Guideline-->
-        <!--android:id="@+id/guideline15"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal"-->
-        <!--app:layout_constraintGuide_percent="0.24" />-->
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/petSun"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:lottie_loop="true" />
 
-    <!--<android.support.constraint.Guideline-->
-        <!--android:id="@+id/guideline16"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal"-->
-        <!--app:layout_constraintGuide_percent="0.67" />-->
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/petHouse"
+        app:layout_constraintEnd_toEndOf="@+id/petHouse"
+        app:layout_constraintHeight_percent="0.6"
+        app:layout_constraintStart_toStartOf="@+id/petHouse"
+        app:srcCompat="@drawable/challenge_category_pet_3" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="@+id/petHouse"
+        app:layout_constraintStart_toStartOf="@+id/petHouse"
+        app:layout_constraintTop_toTopOf="@+id/petHouse"
+        app:srcCompat="@drawable/ic_pet_name_background" />
+
 
 </android.support.constraint.ConstraintLayout>
