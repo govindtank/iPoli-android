@@ -6,48 +6,75 @@
     android:layout_height="match_parent"
     android:background="#81D4FA">
 
-
-    <TextView
-        android:id="@+id/avatarText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:fontFamily="@font/mystery_quest_regular"
-        android:textColor="@color/md_white"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <android.support.constraint.Guideline
-        android:id="@+id/guideline15"
+        android:id="@+id/topBoardTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.35" />
 
     <android.support.constraint.Guideline
-        android:id="@+id/guideline17"
+        android:id="@+id/usernameTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.25" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/avatarTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/topBoardBottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.5" />
 
     <android.support.constraint.Guideline
-        android:id="@+id/guideline18"
+        android:id="@+id/bottomBoardTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.65" />
 
     <android.support.constraint.Guideline
-        android:id="@+id/guideline16"
+        android:id="@+id/bottomBoardBottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.8" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/avatarSun"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:lottie_loop="true" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/avatarTrees"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_loop="true" />
 
     <ImageView
         android:id="@+id/avatarPole"
@@ -57,10 +84,10 @@
         android:layout_marginStart="24dp"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/guideline16"
+        app:layout_constraintBottom_toTopOf="@+id/bottomBoardBottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline15"
+        app:layout_constraintTop_toTopOf="@+id/topBoardTop"
         app:srcCompat="@drawable/ic_avatar_pole" />
 
     <ImageView
@@ -83,7 +110,7 @@
         android:adjustViewBounds="true"
         android:cropToPadding="true"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@+id/guideline17"
+        app:layout_constraintBottom_toTopOf="@+id/topBoardBottom"
         app:layout_constraintEnd_toEndOf="@+id/avatarPole"
         app:layout_constraintStart_toStartOf="@+id/avatarPole"
         app:layout_constraintTop_toTopOf="@+id/avatarPole"
@@ -97,76 +124,215 @@
         android:adjustViewBounds="true"
         android:cropToPadding="true"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintBottom_toTopOf="@+id/bottomBoardTop"
         app:layout_constraintEnd_toEndOf="@+id/avatarPole"
         app:layout_constraintStart_toStartOf="@+id/avatarPole"
-        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintTop_toTopOf="@+id/topBoardBottom"
         app:srcCompat="@drawable/ic_avatar_board" />
 
-    <ImageView
-        android:id="@+id/topAvatar1"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/guideline17"
-        app:layout_constraintTop_toTopOf="@+id/avatarsBoardTop"
-        app:layout_constraintStart_toStartOf="@+id/avatarsBoardTop"
-        app:srcCompat="@drawable/avatar_01" />
-
-    <ImageView
-        android:id="@+id/topAvatar2"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="@+id/topAvatar1"
-        app:layout_constraintTop_toTopOf="@+id/topAvatar1"
-        app:layout_constraintStart_toEndOf="@+id/topAvatar1"
-        app:srcCompat="@drawable/avatar_02" />
-
-    <ImageView
-        android:id="@+id/topAvatar3"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="@+id/topAvatar1"
-        app:layout_constraintEnd_toStartOf="@+id/topAvatar4"
-        app:layout_constraintStart_toEndOf="@+id/topAvatar2"
-        app:layout_constraintTop_toTopOf="@+id/topAvatar1"
-        app:srcCompat="@drawable/avatar_03" />
-
-    <ImageView
-        android:id="@+id/topAvatar4"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="@+id/topAvatar1"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        app:layout_constraintBottom_toBottomOf="@+id/avatarsBoardTop"
         app:layout_constraintEnd_toEndOf="@+id/avatarsBoardTop"
-        app:layout_constraintTop_toTopOf="@+id/topAvatar1"
-        app:srcCompat="@drawable/avatar_04" />
+        app:layout_constraintStart_toStartOf="@+id/avatarsBoardTop"
+        app:layout_constraintTop_toTopOf="@+id/avatarsBoardTop">
+
+        <ImageView
+            android:id="@+id/topAvatar1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/avatar_01" />
+
+        <ImageView
+            android:id="@+id/topAvatar2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/avatar_02" />
+
+        <ImageView
+            android:id="@+id/topAvatar3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/avatar_03" />
+
+        <ImageView
+            android:id="@+id/topAvatar4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/avatar_04" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        app:layout_constraintBottom_toBottomOf="@+id/avatarsBoardBottom"
+        app:layout_constraintEnd_toEndOf="@+id/avatarsBoardBottom"
+        app:layout_constraintStart_toStartOf="@+id/avatarsBoardBottom"
+        app:layout_constraintTop_toTopOf="@+id/avatarsBoardBottom">
+
+        <ImageView
+            android:id="@+id/bottomAvatar1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/avatar_05" />
+
+        <ImageView
+            android:id="@+id/bottomAvatar2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/avatar_06" />
+
+        <ImageView
+            android:id="@+id/bottomAvatar3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/avatar_07" />
+
+        <ImageView
+            android:id="@+id/bottomAvatar4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/avatar_08" />
+
+    </LinearLayout>
+
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/avatarButterflies"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="212dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_margin="16dp"
         android:adjustViewBounds="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_loop="true" />
+
+
+    <TextView
+        android:id="@+id/avatarText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/mystery_quest_regular"
+        android:textColor="@color/md_white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:layout_width="5dp"
+        android:layout_height="0dp"
+        android:background="@color/md_white"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="@+id/avatarUsernameBackground"
+        app:layout_constraintStart_toStartOf="@+id/avatarUsernameBackground"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <View
+        android:layout_width="5dp"
+        android:layout_height="0dp"
+        android:background="@color/md_white"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="@+id/avatarUsernameBackground"
+        app:layout_constraintEnd_toEndOf="@+id/avatarUsernameBackground"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/avatarUsernameBackground"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="48dp"
+        android:layout_marginStart="48dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/topBoardTop"
+        app:layout_constraintEnd_toEndOf="@+id/avatarsBoardBottom"
+        app:layout_constraintStart_toStartOf="@+id/avatarsBoardTop"
+        app:layout_constraintTop_toBottomOf="@+id/usernameTop"
+        app:srcCompat="@drawable/ic_username_background" />
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/md_white"
+        android:hint="@string/username"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:textColor="@color/md_dark_text_87"
+        app:layout_constraintBottom_toBottomOf="@+id/avatarUsernameBackground"
+        app:layout_constraintEnd_toEndOf="@+id/avatarUsernameBackground"
+        app:layout_constraintStart_toStartOf="@+id/avatarUsernameBackground"
+        app:layout_constraintTop_toTopOf="@+id/avatarUsernameBackground" />
+
+
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:padding="8dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toTopOf="@+id/avatarUsernameBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/avatarTop"
+        android:background="@drawable/brown_circular_background" />
+
+    <!--<EditText-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="0dp" />-->
+
 
 </android.support.constraint.ConstraintLayout>

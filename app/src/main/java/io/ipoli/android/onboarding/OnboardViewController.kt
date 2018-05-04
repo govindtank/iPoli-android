@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import io.ipoli.android.R
 import io.ipoli.android.common.AppState
 import io.ipoli.android.common.BaseViewStateReducer
@@ -167,7 +169,16 @@ class OnboardViewController(args: Bundle? = null) :
         ): View {
             val view = container.inflate(R.layout.controller_onboard_avatar)
             view.avatarButterflies.setAnimation("onboarding_butterflies.json")
+            view.avatarSun.setAnimation("onboarding_sun.json")
+            view.avatarTrees.setAnimation("onboarding_avatar_trees.json")
             view.avatarButterflies.playAnimation()
+            view.avatarSun.playAnimation()
+            view.avatarTrees.playAnimation()
+
+
+            Glide.with(view.context).load(R.drawable.avatar_01)
+                .apply(RequestOptions.circleCropTransform())
+                .into(view.avatar)
             return view
         }
 
