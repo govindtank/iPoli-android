@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
@@ -17,22 +18,18 @@ import io.ipoli.android.common.redux.Action
 import io.ipoli.android.common.redux.android.BaseViewController
 import io.ipoli.android.common.redux.android.ReduxViewController
 import io.ipoli.android.common.view.anim.TypewriterTextAnimator
+import io.ipoli.android.common.view.children
 import io.ipoli.android.common.view.enterFullScreen
-import io.ipoli.android.onboarding.OnboardViewState.StateType.INITIAL
-import io.ipoli.android.onboarding.OnboardViewState.StateType.NEXT_PAGE
+import io.ipoli.android.onboarding.OnboardViewState.StateType.*
+import io.ipoli.android.player.data.AndroidAvatar
+import io.ipoli.android.player.data.Avatar
 import kotlinx.android.synthetic.main.controller_add_repeating_quest.view.*
 import kotlinx.android.synthetic.main.controller_onboard_avatar.view.*
 import kotlinx.android.synthetic.main.controller_onboard_story.view.*
 
 sealed class OnboardAction : Action {
+    data class SelectAvatar(val index: Int) : OnboardAction()
     object ShowNext : OnboardAction()
-}
-
-data class OnboardViewState(val type: StateType, val adapterPosition: Int) : ViewState {
-    enum class StateType {
-        INITIAL,
-        NEXT_PAGE
-    }
 }
 
 object OnboardReducer : BaseViewStateReducer<OnboardViewState>() {
@@ -49,6 +46,14 @@ object OnboardReducer : BaseViewStateReducer<OnboardViewState>() {
                     adapterPosition = subState.adapterPosition + 1
                 )
             }
+
+            is OnboardAction.SelectAvatar -> {
+                subState.copy(
+                    type = AVATAR_SELECTED,
+                    avatar = subState.avatars[action.index]
+                )
+            }
+
             else -> subState
         }
     }
@@ -56,10 +61,34 @@ object OnboardReducer : BaseViewStateReducer<OnboardViewState>() {
     override fun defaultState() =
         OnboardViewState(
             INITIAL,
-            adapterPosition = 0
+            adapterPosition = 0,
+            avatar = Avatar.AVATAR_03,
+            avatars = listOf(
+                Avatar.AVATAR_03,
+                Avatar.AVATAR_02,
+                Avatar.AVATAR_01,
+                Avatar.AVATAR_04,
+                Avatar.AVATAR_05,
+                Avatar.AVATAR_06,
+                Avatar.AVATAR_07,
+                Avatar.AVATAR_11
+            )
         )
 
     override val stateKey = key<OnboardViewState>()
+}
+
+data class OnboardViewState(
+    val type: StateType,
+    val adapterPosition: Int,
+    val avatar: Avatar,
+    val avatars: List<Avatar>
+) : ViewState {
+    enum class StateType {
+        INITIAL,
+        NEXT_PAGE,
+        AVATAR_SELECTED
+    }
 }
 
 class OnboardViewController(args: Bundle? = null) :
@@ -175,10 +204,11 @@ class OnboardViewController(args: Bundle? = null) :
             view.avatarSun.playAnimation()
             view.avatarTrees.playAnimation()
 
-
-            Glide.with(view.context).load(R.drawable.avatar_01)
-                .apply(RequestOptions.circleCropTransform())
-                .into(view.avatar)
+//            (view.topAvatarsContainer.children + view.bottomAvatarsContainer.children).forEach {
+//                it.setOnClickListener {
+//                    Timber.d("AAAA click")
+//                }
+//            }
             return view
         }
 
@@ -192,6 +222,20 @@ class OnboardViewController(args: Bundle? = null) :
         }
 
         override fun render(state: OnboardViewState, view: View) {
+            Glide.with(view.context).load(AndroidAvatar.valueOf(state.avatar.name).image)
+                .apply(RequestOptions.circleCropTransform())
+                .into(view.avatar)
+
+            val avatarViews =
+                view.topAvatarsContainer.children + view.bottomAvatarsContainer.children
+
+            state.avatars.forEachIndexed { index, avatar ->
+                val v = avatarViews[index] as ImageView
+                v.setImageResource(AndroidAvatar.valueOf(avatar.name).image)
+                v.setOnClickListener {
+                    dispatch(OnboardAction.SelectAvatar(index))
+                }
+            }
 
         }
 

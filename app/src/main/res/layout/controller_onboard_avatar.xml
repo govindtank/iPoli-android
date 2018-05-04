@@ -18,14 +18,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
+        app:layout_constraintGuide_percent="0.22" />
 
     <android.support.constraint.Guideline
         android:id="@+id/avatarTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.1" />
+        app:layout_constraintGuide_percent="0.08" />
 
     <android.support.constraint.Guideline
         android:id="@+id/topBoardBottom"
@@ -131,11 +131,13 @@
         app:srcCompat="@drawable/ic_avatar_board" />
 
     <LinearLayout
+        android:id="@+id/topAvatarsContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
         android:orientation="horizontal"
         android:weightSum="4"
         app:layout_constraintBottom_toBottomOf="@+id/avatarsBoardTop"
@@ -149,8 +151,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/avatar_01" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="fitCenter" />
 
         <ImageView
             android:id="@+id/topAvatar2"
@@ -158,8 +160,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/avatar_02" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="fitCenter" />
 
         <ImageView
             android:id="@+id/topAvatar3"
@@ -167,8 +169,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/avatar_03" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="fitCenter" />
 
         <ImageView
             android:id="@+id/topAvatar4"
@@ -176,18 +178,20 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/avatar_04" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="fitCenter" />
 
     </LinearLayout>
 
 
     <LinearLayout
+        android:id="@+id/bottomAvatarsContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
         android:orientation="horizontal"
         android:weightSum="4"
         app:layout_constraintBottom_toBottomOf="@+id/avatarsBoardBottom"
@@ -201,8 +205,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/avatar_05" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="fitCenter" />
 
         <ImageView
             android:id="@+id/bottomAvatar2"
@@ -210,8 +214,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/avatar_06" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="fitCenter" />
 
         <ImageView
             android:id="@+id/bottomAvatar3"
@@ -219,8 +223,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/avatar_07" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="fitCenter" />
 
         <ImageView
             android:id="@+id/bottomAvatar4"
@@ -228,8 +232,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/avatar_08" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="fitCenter" />
 
     </LinearLayout>
 
@@ -264,9 +268,9 @@
     <View
         android:layout_width="5dp"
         android:layout_height="0dp"
-        android:background="@color/md_white"
-        android:layout_marginStart="32dp"
         android:layout_marginBottom="32dp"
+        android:layout_marginStart="32dp"
+        android:background="@color/md_white"
         app:layout_constraintBottom_toBottomOf="@+id/avatarUsernameBackground"
         app:layout_constraintStart_toStartOf="@+id/avatarUsernameBackground"
         app:layout_constraintTop_toTopOf="parent" />
@@ -275,9 +279,9 @@
     <View
         android:layout_width="5dp"
         android:layout_height="0dp"
-        android:background="@color/md_white"
-        android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
+        android:layout_marginEnd="32dp"
+        android:background="@color/md_white"
         app:layout_constraintBottom_toBottomOf="@+id/avatarUsernameBackground"
         app:layout_constraintEnd_toEndOf="@+id/avatarUsernameBackground"
         app:layout_constraintTop_toTopOf="parent" />
@@ -315,20 +319,25 @@
         app:layout_constraintTop_toTopOf="@+id/avatarUsernameBackground" />
 
 
-
     <ImageView
         android:id="@+id/avatar"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:padding="8dp"
         android:adjustViewBounds="true"
+        android:background="@drawable/brown_circular_background"
+        android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@+id/avatarUsernameBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/avatarTop"
-        android:background="@drawable/brown_circular_background" />
+        app:layout_constraintTop_toTopOf="@+id/avatarTop" />
+
+    <android.support.constraint.Group
+        android:id="@+id/avatars"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="bottomAvatar3,bottomAvatar1,bottomAvatar4,bottomAvatar2,topAvatar3,topAvatar4,topAvatar1,topAvatar2" />
 
     <!--<EditText-->
     <!--android:layout_width="0dp"-->
