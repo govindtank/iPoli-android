@@ -25,6 +25,8 @@ import io.ipoli.android.common.view.anim.TypewriterTextAnimator
 import io.ipoli.android.onboarding.OnboardViewState.StateType.*
 import io.ipoli.android.player.data.AndroidAvatar
 import io.ipoli.android.player.data.Avatar
+import io.ipoli.android.quest.schedule.calendar.dayview.view.widget.CalendarDayView
+import kotlinx.android.synthetic.main.calendar_hour_cell.view.*
 import kotlinx.android.synthetic.main.controller_onboard.view.*
 import kotlinx.android.synthetic.main.controller_onboard_first_quest.view.*
 import kotlinx.android.synthetic.main.controller_onboard_avatar.view.*
@@ -298,6 +300,17 @@ class OnboardViewController(args: Bundle? = null) :
                     R.color.md_dark_text_54
                 ).respectFontBounds(true)
             )
+
+            view.calendar.setHourAdapter(object : CalendarDayView.HourCellAdapter {
+                override fun bind(view: View, hour: Int) {
+                    if (hour > 0) {
+                        view.timeLabel.text = hour.toString() + ":00"
+                    }
+                }
+            })
+            view.calendar.scrollToNow()
+
+
             return view
         }
 

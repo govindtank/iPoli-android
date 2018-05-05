@@ -9,6 +9,7 @@
     <io.ipoli.android.quest.schedule.calendar.dayview.view.widget.CalendarDayView
         android:id="@+id/calendar"
         android:layout_width="match_parent"
+        app:visibleHours="8"
         android:layout_height="match_parent"
         app:dragImage="@drawable/circle_accent"
         app:dragImagePadding="8dp"
