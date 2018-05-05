@@ -2,7 +2,9 @@ package io.ipoli.android.common.redux
 
 import io.ipoli.android.common.UIAction
 import io.ipoli.android.common.mvi.ViewState
-import io.ipoli.android.common.redux.MiddleWare.Result.Continue
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.channels.Channel
+import kotlinx.coroutines.experimental.channels.actor
 import kotlinx.coroutines.experimental.launch
 import java.util.concurrent.CopyOnWriteArraySet
 import kotlin.coroutines.experimental.CoroutineContext
@@ -65,6 +67,10 @@ abstract class CompositeState<T>(
         return data as S
     }
 
+    fun <S> hasState(key: Class<S>): Boolean = hasState(key.simpleName)
+
+    fun hasState(key: String): Boolean = stateData.containsKey(key)
+
     fun update(stateKey: String, newState: State) =
         createWithData(stateData.plus(Pair(stateKey, newState)))
 
@@ -102,20 +108,21 @@ class StateStore<S : CompositeState<S>>(
     reducers: Set<Reducer<S, *>>,
     sideEffectHandlers: Set<SideEffectHandler<S>> = setOf(),
     private val sideEffectHandlerExecutor: SideEffectHandlerExecutor<S>,
-    middleware: Set<MiddleWare<S>> = setOf()
+    middleware: Set<MiddleWare<S>> = setOf(),
+    coroutineContext: CoroutineContext = CommonPool
 ) : Dispatcher {
 
     interface StateChangeSubscriber<in S> {
-        fun onStateChanged(newState: S)
+        suspend fun onStateChanged(newState: S)
     }
-
-    private var state = initialState
 
     private val middleWare = CompositeMiddleware(middleware)
     private val reducer = CompositeReducer()
     private val sideEffectHandlers = CopyOnWriteArraySet<SideEffectHandler<S>>(sideEffectHandlers)
     private val reducers = CopyOnWriteArraySet<Reducer<S, *>>(reducers)
     private val stateChangeSubscribers = CopyOnWriteArraySet<StateChangeSubscriber<S>>()
+
+    private val stateActor = createStateActor(coroutineContext)
 
     fun addSideEffectHandler(handler: SideEffectHandler<S>) {
         sideEffectHandlers.add(handler)
@@ -125,29 +132,46 @@ class StateStore<S : CompositeState<S>>(
         sideEffectHandlers.remove(handler)
     }
 
+    var state = initialState
+
+    private fun createStateActor(
+        coroutineContext: CoroutineContext
+    ) =
+        actor<Action>(coroutineContext, capacity = Channel.UNLIMITED) {
+
+            for (action in channel) {
+                val res = executeMiddleware(state, action)
+                if (res == MiddleWare.Result.Continue) {
+                    state = applyReducers(state, action)
+                    notifyStateChanged(state)
+                    executeSideEffects(action, state)
+                }
+            }
+        }
+
+    private fun applyReducers(state: S, action: Action) =
+        reducer.reduce(state, action)
+
+    private fun executeMiddleware(
+        state: S,
+        action: Action
+    ) = middleWare.execute(state, this, action)
+
     override fun <A : Action> dispatch(action: A) {
-        val res = middleWare.execute(state, this, action)
-        if (res == Continue) changeState(action)
+        stateActor.offer(action)
     }
 
-    private fun changeState(action: Action) {
-        val newState = reducer.reduce(state, action)
-        state = newState
-        notifyStateChanged(newState)
-        executeSideEffects(action)
-    }
-
-    private fun executeSideEffects(action: Action) {
+    private fun executeSideEffects(action: Action, newState: S) {
         sideEffectHandlers
             .filter {
                 it.canHandle(action)
             }
             .forEach {
-                sideEffectHandlerExecutor.execute(it, action, state, this)
+                sideEffectHandlerExecutor.execute(it, action, newState, this)
             }
     }
 
-    private fun notifyStateChanged(newState: S) {
+    private suspend fun notifyStateChanged(newState: S) {
         stateChangeSubscribers.forEach {
             it.onStateChanged(newState)
         }
@@ -155,7 +179,6 @@ class StateStore<S : CompositeState<S>>(
 
     fun subscribe(subscriber: StateChangeSubscriber<S>) {
         stateChangeSubscribers.add(subscriber)
-        subscriber.onStateChanged(state)
     }
 
     fun unsubscribe(subscriber: StateChangeSubscriber<S>) {

@@ -178,7 +178,6 @@ class AddRepeatingQuestViewController(args: Bundle? = null) :
             else -> throw IllegalArgumentException("Unknown controller position $adapterPosition")
         }
 
-
     class NameViewController(args: Bundle? = null) :
         BaseViewController<EditRepeatingQuestAction, EditRepeatingQuestViewState>(
             args
@@ -259,7 +258,7 @@ class AddRepeatingQuestViewController(args: Bundle? = null) :
             state: EditRepeatingQuestViewState,
             view: View
         ) {
-            view.rqColor.setOnClickListener {
+            view.rqColor.onDebounceClick {
                 ColorPickerDialogController({
                     dispatch(EditRepeatingQuestAction.ChangeColor(it))
                 }, state.color).show(
@@ -277,7 +276,7 @@ class AddRepeatingQuestViewController(args: Bundle? = null) :
                 IconicsDrawable(view.context).largeIcon(state.iicon)
             )
 
-            view.rqIcon.setOnClickListener {
+            view.rqIcon.onDebounceClick {
                 IconPickerDialogController({ icon ->
                     dispatch(EditRepeatingQuestAction.ChangeIcon(icon))
                 }, state.icon).show(
@@ -382,7 +381,7 @@ class AddRepeatingQuestViewController(args: Bundle? = null) :
                 holder: SimpleViewHolder
             ) {
                 (view as TextView).text = vm.value.text
-                view.setOnClickListener {
+                view.onDebounceClick {
                     if (vm.value == MORE_OPTIONS) {
                         RepeatPatternPickerDialogController(
                             null,
@@ -462,7 +461,7 @@ class AddRepeatingQuestViewController(args: Bundle? = null) :
                 holder: SimpleViewHolder
             ) {
                 (view as TextView).text = vm.value.text
-                view.setOnClickListener {
+                view.onDebounceClick {
                     if (vm.value == EditRepeatingQuestViewState.DurationOption.MORE_OPTIONS) {
                         DurationPickerDialogController(
                             null,
@@ -530,7 +529,7 @@ class AddRepeatingQuestViewController(args: Bundle? = null) :
 
             view.summarySubQuestName.addTextChangedListener(newSubQuestWatcher)
 
-            view.summaryAddSubQuest.setOnClickListener {
+            view.summaryAddSubQuest.onDebounceClick {
                 addSubQuest(view)
             }
 
@@ -692,7 +691,7 @@ class AddRepeatingQuestViewController(args: Bundle? = null) :
             view: View,
             state: EditRepeatingQuestViewState
         ) {
-            view.summaryColor.setOnClickListener {
+            view.summaryColor.onDebounceClick {
                 ColorPickerDialogController({
                     dispatch(EditRepeatingQuestAction.ChangeColor(it))
                 }, state.color).show(
@@ -710,7 +709,7 @@ class AddRepeatingQuestViewController(args: Bundle? = null) :
                 IconicsDrawable(view.context).largeIcon(state.iicon)
             )
 
-            view.summaryIcon.setOnClickListener {
+            view.summaryIcon.onDebounceClick {
                 IconPickerDialogController({ icon ->
                     dispatch(EditRepeatingQuestAction.ChangeIcon(icon))
                 }, state.icon).show(
@@ -723,7 +722,7 @@ class AddRepeatingQuestViewController(args: Bundle? = null) :
         private fun renderDuration(view: View, state: EditRepeatingQuestViewState) {
 
             view.summaryDuration.text = state.durationText
-            view.summaryDuration.setOnClickListener {
+            view.summaryDuration.onDebounceClick {
                 DurationPickerDialogController(
                     state.duration.intValue,
                     { dispatch(EditRepeatingQuestAction.DurationPicked(it)) }
@@ -733,7 +732,7 @@ class AddRepeatingQuestViewController(args: Bundle? = null) :
 
         private fun renderRepeatPattern(view: View, state: EditRepeatingQuestViewState) {
             view.summaryRepeatPattern.text = state.repeatPatternText
-            view.summaryRepeatPattern.setOnClickListener {
+            view.summaryRepeatPattern.onDebounceClick {
                 RepeatPatternPickerDialogController(state.repeatPattern, { p ->
                     dispatch(EditRepeatingQuestAction.ChangeRepeatPattern(p))
                 }).show(router)
@@ -745,7 +744,7 @@ class AddRepeatingQuestViewController(args: Bundle? = null) :
             state: EditRepeatingQuestViewState
         ) {
             view.summaryStartTime.text = state.startTimeText
-            view.summaryStartTime.setOnClickListener {
+            view.summaryStartTime.onDebounceClick {
                 val startTime = state.startTime ?: Time.now()
                 val dialog = TimePickerDialog(
                     view.context,
@@ -773,7 +772,7 @@ class AddRepeatingQuestViewController(args: Bundle? = null) :
 
         private fun renderReminder(view: View, state: EditRepeatingQuestViewState) {
             view.summaryReminder.text = state.reminderText
-            view.summaryReminder.setOnClickListener {
+            view.summaryReminder.onDebounceClick {
                 ReminderPickerDialogController(
                     object : ReminderPickerDialogController.ReminderPickedListener {
                         override fun onReminderPicked(reminder: ReminderViewModel?) {
@@ -790,7 +789,7 @@ class AddRepeatingQuestViewController(args: Bundle? = null) :
             state: EditRepeatingQuestViewState
         ) {
             view.summaryChallenge.text = state.challengeText
-            view.summaryChallenge.setOnClickListener {
+            view.summaryChallenge.onDebounceClick {
                 ChallengePickerDialogController(state.challenge, { challenge ->
                     dispatch(EditRepeatingQuestAction.ChangeChallenge(challenge))
                 }).show(router)
@@ -799,7 +798,7 @@ class AddRepeatingQuestViewController(args: Bundle? = null) :
 
         private fun renderNote(view: View, state: EditRepeatingQuestViewState) {
             view.summaryNote.text = state.noteText
-            view.summaryNote.setOnClickListener {
+            view.summaryNote.onDebounceClick {
                 NoteDialogViewController(state.note, { text ->
                     dispatch(EditRepeatingQuestAction.ChangeNote(text))
                 }).show(router)

@@ -29,6 +29,7 @@ class AddQuestAnimationHelper(
 ) {
 
     fun openAddContainer(currentDate: LocalDate? = LocalDate.now()) {
+        fab.isClickable = false
         val halfWidth = addContainer.width / 2
 
         val fabSet = createFabAnimator(fab, halfWidth.toFloat() - fab.width / 2)
@@ -89,6 +90,11 @@ class AddQuestAnimationHelper(
                     (addContainer.width - fab.width - ViewUtils.dpToPx(16f, fab.context)),
                     reverse = true
                 )
+                fabSet.addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator?) {
+                        fab.isClickable = true
+                    }
+                })
                 fabSet.start()
 
             }

@@ -210,7 +210,7 @@ class IconPickerDialogController :
         setNeutralButtonListener {
             showIcons(view)
         }
-        view.buyIconPack.dispatchOnClick(IconPickerAction.BuyIconPack(IconPack.BASIC))
+        view.buyIconPack.dispatchOnClick { IconPickerAction.BuyIconPack(IconPack.BASIC) }
         view.iconPackPrice.text = IconPack.BASIC.gemPrice.toString()
     }
 
@@ -251,7 +251,7 @@ class IconPickerDialogController :
                     dismiss()
                 }
             } else {
-                view.dispatchOnClick(IconPickerAction.ShowUnlock)
+                view.dispatchOnClick { IconPickerAction.ShowUnlock }
             }
         }
 

@@ -96,7 +96,7 @@ class EditRepeatingQuestViewController(args: Bundle? = null) :
 
         view.summarySubQuestName.addTextChangedListener(newSubQuestWatcher)
 
-        view.summaryAddSubQuest.setOnClickListener {
+        view.summaryAddSubQuest.onDebounceClick {
             addSubQuest(view)
         }
 
@@ -259,7 +259,7 @@ class EditRepeatingQuestViewController(args: Bundle? = null) :
         state: EditRepeatingQuestViewState
     ) {
         colorLayout(view, state.color)
-        view.summaryColor.setOnClickListener {
+        view.summaryColor.onDebounceClick {
             ColorPickerDialogController({
                 dispatch(EditRepeatingQuestAction.ChangeColor(it))
             }, state.color).show(
@@ -278,7 +278,7 @@ class EditRepeatingQuestViewController(args: Bundle? = null) :
         )
 
 
-        view.summaryIcon.setOnClickListener {
+        view.summaryIcon.onDebounceClick {
             IconPickerDialogController({ icon ->
                 dispatch(EditRepeatingQuestAction.ChangeIcon(icon))
             }, state.icon).show(
@@ -291,7 +291,7 @@ class EditRepeatingQuestViewController(args: Bundle? = null) :
     private fun renderDuration(view: View, state: EditRepeatingQuestViewState) {
 
         view.summaryDuration.text = state.durationText
-        view.summaryDuration.setOnClickListener {
+        view.summaryDuration.onDebounceClick {
             DurationPickerDialogController(
                 state.duration.intValue,
                 { dispatch(EditRepeatingQuestAction.DurationPicked(it)) }
@@ -301,7 +301,7 @@ class EditRepeatingQuestViewController(args: Bundle? = null) :
 
     private fun renderRepeatPattern(view: View, state: EditRepeatingQuestViewState) {
         view.summaryRepeatPattern.text = state.repeatPatternText
-        view.summaryRepeatPattern.setOnClickListener {
+        view.summaryRepeatPattern.onDebounceClick {
             RepeatPatternPickerDialogController(state.repeatPattern, { p ->
                 dispatch(EditRepeatingQuestAction.ChangeRepeatPattern(p))
             }).show(router)
@@ -313,7 +313,7 @@ class EditRepeatingQuestViewController(args: Bundle? = null) :
         state: EditRepeatingQuestViewState
     ) {
         view.summaryStartTime.text = state.startTimeText
-        view.summaryStartTime.setOnClickListener {
+        view.summaryStartTime.onDebounceClick {
             val startTime = state.startTime ?: Time.now()
             val dialog = TimePickerDialog(
                 view.context,
@@ -341,7 +341,7 @@ class EditRepeatingQuestViewController(args: Bundle? = null) :
 
     private fun renderReminder(view: View, state: EditRepeatingQuestViewState) {
         view.summaryReminder.text = state.reminderText
-        view.summaryReminder.setOnClickListener {
+        view.summaryReminder.onDebounceClick {
             ReminderPickerDialogController(
                 object : ReminderPickerDialogController.ReminderPickedListener {
                     override fun onReminderPicked(reminder: ReminderViewModel?) {
@@ -358,7 +358,7 @@ class EditRepeatingQuestViewController(args: Bundle? = null) :
         state: EditRepeatingQuestViewState
     ) {
         view.summaryChallenge.text = state.challengeText
-        view.summaryChallenge.setOnClickListener {
+        view.summaryChallenge.onDebounceClick {
             ChallengePickerDialogController(state.challenge, { challenge ->
                 dispatch(EditRepeatingQuestAction.ChangeChallenge(challenge))
             }).show(router)
@@ -367,7 +367,7 @@ class EditRepeatingQuestViewController(args: Bundle? = null) :
 
     private fun renderNote(view: View, state: EditRepeatingQuestViewState) {
         view.summaryNote.text = state.noteText
-        view.summaryNote.setOnClickListener {
+        view.summaryNote.onDebounceClick {
             NoteDialogViewController(state.note, { text ->
                 dispatch(EditRepeatingQuestAction.ChangeNote(text))
             }).show(router)

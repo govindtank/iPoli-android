@@ -18,6 +18,7 @@ import io.ipoli.android.common.redux.android.ReduxViewController
 import io.ipoli.android.common.view.anim.TypewriterTextAnimator
 import io.ipoli.android.common.view.children
 import io.ipoli.android.common.view.enterFullScreen
+import io.ipoli.android.common.view.inflate
 import io.ipoli.android.onboarding.OnboardViewState.StateType.*
 import io.ipoli.android.player.data.AndroidAvatar
 import io.ipoli.android.player.data.Avatar
@@ -141,7 +142,7 @@ class OnboardViewController(args: Bundle? = null) :
         when (position) {
             STORY_INDEX -> StoryViewController()
             AVATAR_INDEX -> AvatarViewController()
-            PET_INDEX ->PetViewController()
+            PET_INDEX -> PetViewController()
             else -> throw IllegalArgumentException("Unknown controller position $position")
         }
 
@@ -165,7 +166,7 @@ class OnboardViewController(args: Bundle? = null) :
             view.storyStars.playAnimation()
             view.storySnail.playAnimation()
 
-            view.storyNext.dispatchOnClick(OnboardAction.ShowNext)
+            view.storyNext.dispatchOnClick { OnboardAction.ShowNext }
             return view
         }
 
@@ -204,7 +205,7 @@ class OnboardViewController(args: Bundle? = null) :
             view.avatarSun.playAnimation()
             view.avatarTrees.playAnimation()
 
-            view.avatarNext.dispatchOnClick(OnboardAction.ShowNext)
+            view.avatarNext.dispatchOnClick { OnboardAction.ShowNext }
 
             return view
         }
@@ -227,9 +228,7 @@ class OnboardViewController(args: Bundle? = null) :
             state.avatars.forEachIndexed { index, avatar ->
                 val v = avatarViews[index] as ImageView
                 v.setImageResource(AndroidAvatar.valueOf(avatar.name).image)
-                v.setOnClickListener {
-                    dispatch(OnboardAction.SelectAvatar(index))
-                }
+                v.dispatchOnClick { OnboardAction.SelectAvatar(index) }
             }
 
         }

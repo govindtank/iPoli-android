@@ -15,9 +15,6 @@ import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.view.*
 import android.widget.RelativeLayout
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.channels.SendChannel
-import kotlinx.coroutines.experimental.launch
 import io.ipoli.android.R
 import io.ipoli.android.common.AppState
 import io.ipoli.android.common.NamespaceAction
@@ -32,6 +29,10 @@ import io.ipoli.android.common.redux.Action
 import io.ipoli.android.common.redux.StateStore
 import io.ipoli.android.common.redux.ViewStateReducer
 import io.ipoli.android.myPoliApp
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.channels.SendChannel
+import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.withContext
 import space.traversal.kapsule.Injects
 import space.traversal.kapsule.inject
 import space.traversal.kapsule.required
@@ -163,10 +164,11 @@ abstract class MviPopup<in VS : ViewState, in V : ViewStateRenderer<VS>, out P :
         )
         val fadeAnim = ObjectAnimator.ofFloat(contentView, "alpha", 0f, 1f)
         transAnim.duration =
-            contentView.context.resources.getInteger(android.R.integer.config_mediumAnimTime)
-                .toLong()
+                contentView.context.resources.getInteger(android.R.integer.config_mediumAnimTime)
+                    .toLong()
         fadeAnim.duration =
-            contentView.context.resources.getInteger(android.R.integer.config_longAnimTime).toLong()
+                contentView.context.resources.getInteger(android.R.integer.config_longAnimTime)
+                    .toLong()
         val animSet = AnimatorSet()
         animSet.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationStart(animation: Animator) {
@@ -194,11 +196,11 @@ abstract class MviPopup<in VS : ViewState, in V : ViewStateRenderer<VS>, out P :
         )
         val fadeAnim = ObjectAnimator.ofFloat(contentView, "alpha", 1f, 0f)
         transAnim.duration =
-            contentView.context.resources.getInteger(android.R.integer.config_shortAnimTime)
-                .toLong()
+                contentView.context.resources.getInteger(android.R.integer.config_shortAnimTime)
+                    .toLong()
         fadeAnim.duration =
-            contentView.context.resources.getInteger(android.R.integer.config_mediumAnimTime)
-                .toLong()
+                contentView.context.resources.getInteger(android.R.integer.config_mediumAnimTime)
+                    .toLong()
         val animSet = AnimatorSet()
         animSet.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
@@ -402,10 +404,11 @@ abstract class ReduxPopup<A : Action, VS : ViewState, out VSR : ViewStateReducer
         )
         val fadeAnim = ObjectAnimator.ofFloat(contentView, "alpha", 0f, 1f)
         transAnim.duration =
-            contentView.context.resources.getInteger(android.R.integer.config_mediumAnimTime)
-                .toLong()
+                contentView.context.resources.getInteger(android.R.integer.config_mediumAnimTime)
+                    .toLong()
         fadeAnim.duration =
-            contentView.context.resources.getInteger(android.R.integer.config_longAnimTime).toLong()
+                contentView.context.resources.getInteger(android.R.integer.config_longAnimTime)
+                    .toLong()
         val animSet = AnimatorSet()
         animSet.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationStart(animation: Animator) {
@@ -433,11 +436,11 @@ abstract class ReduxPopup<A : Action, VS : ViewState, out VSR : ViewStateReducer
         )
         val fadeAnim = ObjectAnimator.ofFloat(contentView, "alpha", 1f, 0f)
         transAnim.duration =
-            contentView.context.resources.getInteger(android.R.integer.config_shortAnimTime)
-                .toLong()
+                contentView.context.resources.getInteger(android.R.integer.config_shortAnimTime)
+                    .toLong()
         fadeAnim.duration =
-            contentView.context.resources.getInteger(android.R.integer.config_mediumAnimTime)
-                .toLong()
+                contentView.context.resources.getInteger(android.R.integer.config_mediumAnimTime)
+                    .toLong()
         val animSet = AnimatorSet()
         animSet.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
@@ -493,12 +496,14 @@ abstract class ReduxPopup<A : Action, VS : ViewState, out VSR : ViewStateReducer
         playExitAnimation(contentView)
     }
 
-    override fun onStateChanged(newState: AppState) {
-        val viewState = newState.stateFor<VS>(reducer.stateKey)
-        if (viewState != currentState) {
-            currentState = viewState
-            launch(UI) {
-                onRenderViewState(viewState)
+    override suspend fun onStateChanged(newState: AppState) {
+        if (newState.hasState(reducer.stateKey)) {
+            val viewState = newState.stateFor<VS>(reducer.stateKey)
+            if (viewState != currentState) {
+                currentState = viewState
+                withContext(UI) {
+                    onRenderViewState(viewState)
+                }
             }
         }
     }

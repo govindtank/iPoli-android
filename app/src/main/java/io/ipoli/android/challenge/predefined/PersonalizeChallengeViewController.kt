@@ -42,7 +42,7 @@ class PersonalizeChallengeViewController(args: Bundle? = null) :
         setHasOptionsMenu(true)
         val view = inflater.inflate(R.layout.controller_personalize_challenge, container, false)
         view.challengeQuestList.layoutManager =
-            LinearLayoutManager(container.context, LinearLayoutManager.VERTICAL, false)
+                LinearLayoutManager(container.context, LinearLayoutManager.VERTICAL, false)
         val androidChallenge = AndroidPredefinedChallenge.valueOf(challenge.name)
         view.challengeBackgroundImage.setBackgroundResource(androidChallenge.backgroundImage)
         view.challengeImage.setBackgroundResource(androidChallenge.smallImage)
@@ -50,7 +50,7 @@ class PersonalizeChallengeViewController(args: Bundle? = null) :
 
         view.challengeQuestList.adapter = ChallengeQuestAdapter()
         setToolbar(view.toolbar)
-        view.acceptChallenge.dispatchOnClick(PersonalizeChallengeAction.Validate)
+        view.acceptChallenge.dispatchOnClick { PersonalizeChallengeAction.Validate }
         return view
     }
 
@@ -111,13 +111,11 @@ class PersonalizeChallengeViewController(args: Bundle? = null) :
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val vm = viewModels[position]
             val itemView = holder.itemView
-            itemView.dispatchOnClickAndExec(
-                PersonalizeChallengeAction.ToggleSelected(vm.quest),
-                {
-                    itemView.challengeQuestCheckbox.isChecked =
+            itemView.dispatchOnClick {
+                itemView.challengeQuestCheckbox.isChecked =
                         !itemView.challengeQuestCheckbox.isChecked
-                }
-            )
+                PersonalizeChallengeAction.ToggleSelected(vm.quest)
+            }
 
 
             itemView.challengeQuestCheckbox.isChecked = vm.isSelected

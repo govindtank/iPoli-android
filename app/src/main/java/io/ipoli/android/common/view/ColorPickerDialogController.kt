@@ -193,7 +193,7 @@ class ColorPickerDialogController :
         setNeutralButtonListener {
             showColors(view)
         }
-        view.buyColorPack.dispatchOnClick(ColorPickerAction.BuyColorPack(ColorPack.BASIC))
+        view.buyColorPack.dispatchOnClick { ColorPickerAction.BuyColorPack(ColorPack.BASIC) }
         view.colorPackPrice.text = ColorPack.BASIC.gemPrice.toString()
     }
 
@@ -242,12 +242,12 @@ class ColorPickerDialogController :
                 else -> iv.setImageDrawable(null)
             }
             if (!vm.isLocked) {
-                iv.setOnClickListener {
+                iv.onDebounceClick {
                     listener?.invoke(vm.color)
                     dismiss()
                 }
             } else {
-                iv.dispatchOnClick(ColorPickerAction.ShowUnlock)
+                iv.dispatchOnClick { ColorPickerAction.ShowUnlock }
             }
         }
 

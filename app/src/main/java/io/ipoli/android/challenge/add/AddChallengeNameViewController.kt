@@ -144,7 +144,7 @@ class AddChallengeNameViewController(args: Bundle? = null) :
                 .largeIcon(state.iicon)
         )
 
-        view.challengeIcon.setOnClickListener {
+        view.challengeIcon.onDebounceClick {
             IconPickerDialogController({ icon ->
                 dispatch(EditChallengeAction.ChangeIcon(icon))
             }, state.icon).show(
@@ -160,7 +160,7 @@ class AddChallengeNameViewController(args: Bundle? = null) :
         state: EditChallengeViewState
     ) {
         colorLayout(view, state)
-        view.challengeColor.setOnClickListener {
+        view.challengeColor.onDebounceClick {
             ColorPickerDialogController({
                 dispatch(EditChallengeAction.ChangeColor(it))
             }, state.color).show(

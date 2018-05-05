@@ -58,7 +58,6 @@ class MainActivity : AppCompatActivity(), Injects<Module>, SideEffectHandler<App
     lateinit var router: Router
 
     private val playerRepository by required { playerRepository }
-    private val tagRepository by required { tagRepository }
 
     private val stateStore by required { stateStore }
 

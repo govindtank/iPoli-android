@@ -128,10 +128,10 @@ class AvatarStoreViewController(args: Bundle? = null) :
             view.imageContainer.setCardBackgroundColor(colorRes(item.backgroundColor))
             view.image.setImageResource(item.image)
             view.price.text =
-                if (item.gemPrice == 0)
-                    stringRes(R.string.free)
-                else
-                    item.gemPrice.toString()
+                    if (item.gemPrice == 0)
+                        stringRes(R.string.free)
+                    else
+                        item.gemPrice.toString()
 
             when (item) {
 
@@ -141,12 +141,12 @@ class AvatarStoreViewController(args: Bundle? = null) :
                 is AvatarViewModel.Bought -> {
                     view.currentAvatar.gone()
                     view.buy.setText(R.string.pick_me)
-                    view.buy.dispatchOnClick(AvatarStoreAction.Change(item.avatar))
+                    view.buy.dispatchOnClick { AvatarStoreAction.Change(item.avatar) }
                 }
 
                 is AvatarViewModel.ForSale -> {
                     view.currentAvatar.gone()
-                    view.buy.dispatchOnClick(AvatarStoreAction.Buy(item.avatar))
+                    view.buy.dispatchOnClick { AvatarStoreAction.Buy(item.avatar) }
                 }
 
             }

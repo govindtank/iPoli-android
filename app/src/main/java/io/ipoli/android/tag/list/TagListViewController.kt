@@ -40,7 +40,7 @@ class TagListViewController(args: Bundle? = null) :
     ): View {
         val view = inflater.inflate(R.layout.controller_tag_list, container, false)
 
-        view.tagAdd.dispatchOnClick(TagListAction.AddTag)
+        view.tagAdd.dispatchOnClick { TagListAction.AddTag }
 
         initEmptyView(view)
         return view
@@ -146,10 +146,10 @@ class TagListViewController(args: Bundle? = null) :
             else R.drawable.ic_favorite_outline_white_24dp
         )
 
-        view.tagFavorite.dispatchOnClick(
+        view.tagFavorite.dispatchOnClick {
             if (tag.isFavorite) TagListAction.Unfavorite(tag)
             else TagListAction.Favorite(tag)
-        )
+        }
 
         view.questCount.text = tag.questCount.toString()
     }

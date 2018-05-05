@@ -14,8 +14,6 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import com.bluelinelabs.conductor.RestoreViewOnCreateController
-import kotlinx.android.synthetic.main.controller_membership.view.*
-import kotlinx.android.synthetic.main.view_no_elevation_toolbar.view.*
 import io.ipoli.android.BillingConstants
 import io.ipoli.android.Constants
 import io.ipoli.android.R
@@ -25,6 +23,8 @@ import io.ipoli.android.common.view.*
 import io.ipoli.android.store.membership.MembershipViewState.StateType.*
 import io.ipoli.android.store.purchase.AndroidSubscriptionManager
 import io.ipoli.android.store.purchase.SubscriptionManager
+import kotlinx.android.synthetic.main.controller_membership.view.*
+import kotlinx.android.synthetic.main.view_no_elevation_toolbar.view.*
 import org.solovyev.android.checkout.Billing
 import org.solovyev.android.checkout.Checkout
 import org.solovyev.android.checkout.IntentStarter
@@ -139,20 +139,18 @@ class MembershipViewController(args: Bundle? = null) :
                 renderReasons(view, state)
                 renderPrices(view, state)
 
-                view.monthlyPlanContainer.dispatchOnClick(MembershipAction.SelectPlan(io.ipoli.android.store.membership.MembershipPlan.MONTHLY))
-                view.yearlyPlanContainer.dispatchOnClick(MembershipAction.SelectPlan(io.ipoli.android.store.membership.MembershipPlan.YEARLY))
-                view.quarterlyPlanContainer.dispatchOnClick(MembershipAction.SelectPlan(io.ipoli.android.store.membership.MembershipPlan.QUARTERLY))
+                view.monthlyPlanContainer.dispatchOnClick { MembershipAction.SelectPlan(io.ipoli.android.store.membership.MembershipPlan.MONTHLY) }
+                view.yearlyPlanContainer.dispatchOnClick { MembershipAction.SelectPlan(io.ipoli.android.store.membership.MembershipPlan.YEARLY) }
+                view.quarterlyPlanContainer.dispatchOnClick { MembershipAction.SelectPlan(io.ipoli.android.store.membership.MembershipPlan.QUARTERLY) }
 
                 if (!state.showCurrentPlan) {
                     playGoPremiumAnimation(view)
-                    view.goPremium.isEnabled = true
+                    view.goPremium.enableClick()
                     view.goPremium.text = state.premiumButtonText
-                    view.goPremium.dispatchOnClickAndExec(
-                        MembershipAction.GoPremium(state.selectedPlan, state.activeSkus),
-                        {
-                            view.goPremium.isEnabled = false
-                        }
-                    )
+                    view.goPremium.onDebounceClick {
+                        view.goPremium.disableClick()
+                        dispatch(MembershipAction.GoPremium(state.selectedPlan, state.activeSkus))
+                    }
                 }
             }
 

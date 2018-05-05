@@ -135,15 +135,15 @@ class PetStoreViewController(args: Bundle? = null) :
 
             when (vm.action) {
                 PetViewModel.Action.CHANGE -> {
-                    action.dispatchOnClick(ChangePet(vm.avatar))
+                    action.dispatchOnClick { ChangePet(vm.avatar) }
                 }
 
                 PetViewModel.Action.UNLOCK -> {
-                    action.dispatchOnClick(UnlockPet(vm.avatar))
+                    action.dispatchOnClick { UnlockPet(vm.avatar) }
                 }
 
                 PetViewModel.Action.BUY -> {
-                    action.dispatchOnClick(BuyPet(vm.avatar))
+                    action.dispatchOnClick { BuyPet(vm.avatar) }
                 }
             }
 

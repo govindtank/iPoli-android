@@ -251,9 +251,9 @@ class QuestViewController : ReduxViewController<QuestAction, QuestViewState, Que
                 view.pomodoroIndicatorsGroup.visible = true
                 renderTimerIndicatorsProgress(view, state)
 
-                view.addPomodoro.dispatchOnClick(QuestAction.AddPomodoro)
-                view.removePomodoro.dispatchOnClick(QuestAction.RemovePomodoro)
-                view.startStop.dispatchOnClick(QuestAction.Start)
+                view.addPomodoro.dispatchOnClick { QuestAction.AddPomodoro }
+                view.removePomodoro.dispatchOnClick { QuestAction.RemovePomodoro }
+                view.startStop.dispatchOnClick { QuestAction.Start }
                 view.complete.visibility = View.GONE
 
                 dispatch(QuestAction.UpdateNote(state.note))
@@ -262,7 +262,7 @@ class QuestViewController : ReduxViewController<QuestAction, QuestViewState, Que
             QuestViewState.StateType.SHOW_COUNTDOWN -> {
                 renderTimerProgress(view, state)
                 renderTypeSwitch(view, state)
-                view.startStop.dispatchOnClick(QuestAction.Start)
+                view.startStop.dispatchOnClick { QuestAction.Start }
                 view.pomodoroIndicatorsGroup.visible = false
 
                 dispatch(QuestAction.UpdateNote(state.note))
@@ -283,7 +283,7 @@ class QuestViewController : ReduxViewController<QuestAction, QuestViewState, Que
                 cancelAnimations(view)
 
                 renderTimerButton(view.startStop, TimerButton.START)
-                view.startStop.dispatchOnClick(QuestAction.Start)
+                view.startStop.dispatchOnClick { QuestAction.Start }
                 view.setOnClickListener(null)
                 view.complete.visibility = View.GONE
             }
@@ -292,7 +292,7 @@ class QuestViewController : ReduxViewController<QuestAction, QuestViewState, Que
                 view.timerProgress.progress = state.timerProgress
                 if (state.showCompletePomodoroButton) {
                     renderTimerButton(view.startStop, TimerButton.DONE)
-                    view.startStop.dispatchOnClick(QuestAction.CompletePomodoro)
+                    view.startStop.dispatchOnClick { QuestAction.CompletePomodoro }
                 }
             }
 
@@ -449,7 +449,7 @@ class QuestViewController : ReduxViewController<QuestAction, QuestViewState, Que
         handler.postDelayed(updateTimer, 1000)
 
         renderTimerButton(view.startStop, TimerButton.STOP)
-        view.startStop.dispatchOnClick(QuestAction.Stop)
+        view.startStop.dispatchOnClick { QuestAction.Stop }
 
         if (state.timerType == QuestViewState.TimerType.POMODORO) {
             view.pomodoroIndicatorsGroup.visible = true
@@ -457,7 +457,7 @@ class QuestViewController : ReduxViewController<QuestAction, QuestViewState, Que
         } else {
             view.complete.visibility = View.VISIBLE
             view.pomodoroIndicatorsGroup.visible = false
-            view.complete.dispatchOnClick(QuestAction.CompleteQuest)
+            view.complete.dispatchOnClick { QuestAction.CompleteQuest }
         }
 
         view.timerProgressLayout.setOnClickListener {

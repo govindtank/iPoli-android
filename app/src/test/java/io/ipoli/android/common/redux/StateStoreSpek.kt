@@ -1,12 +1,14 @@
 package io.ipoli.android.common.redux
 
-import kotlinx.coroutines.experimental.runBlocking
 import io.ipoli.android.common.UIAction
 import io.ipoli.android.common.mvi.ViewState
+import kotlinx.coroutines.experimental.Unconfined
+import kotlinx.coroutines.experimental.runBlocking
 import org.amshove.kluent.`should be equal to`
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
+import org.jetbrains.spek.api.dsl.xdescribe
 
 /**
  * Created by Venelin Valkov <venelin@io.ipoli.io>
@@ -78,7 +80,8 @@ object StateStoreSpek : Spek({
                 reducers = setOf(testReducer),
                 sideEffectHandlers = sideEffectHandlers,
                 sideEffectHandlerExecutor = TestSideEffectHandlerExecutor(),
-                middleware = middleware
+                middleware = middleware,
+                coroutineContext = Unconfined
             )
 
         it("should call the reducer with no middleware") {
@@ -135,27 +138,12 @@ object StateStoreSpek : Spek({
             }
         }
 
-        it("should call subscriber on subscribe") {
-
-            var stateChangeCount = 0
-
-            val subscriber = object : StateStore.StateChangeSubscriber<TestState> {
-                override fun onStateChanged(newState: TestState) {
-                    stateChangeCount++
-                }
-            }
-
-            createStore().subscribe(subscriber)
-
-            stateChangeCount.`should be equal to`(1)
-        }
-
         it("should call subscriber on dispatch") {
 
             var stateChangeCount = 0
 
             val subscriber = object : StateStore.StateChangeSubscriber<TestState> {
-                override fun onStateChanged(newState: TestState) {
+                override suspend fun onStateChanged(newState: TestState) {
                     stateChangeCount++
                 }
             }

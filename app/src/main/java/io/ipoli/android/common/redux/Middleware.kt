@@ -30,7 +30,6 @@ class CompositeMiddleware<in S : State>(private val middleware: Set<MiddleWare<S
     MiddleWare<S> {
 
     override fun execute(state: S, dispatcher: Dispatcher, action: Action): MiddleWare.Result {
-
         for (m in middleware) {
             if (m.execute(state, dispatcher, action) == Stop) {
                 return Stop

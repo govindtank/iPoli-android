@@ -418,7 +418,7 @@ class HomeViewController(args: Bundle? = null) :
         get() = AndroidPetAvatar.valueOf(petAvatar.name).headImage
 
     private val HomeViewState.petMoodColor
-        get() = AndroidPetMood.valueOf(petMood.name).color
+        get() = AndroidPetMood.valueOf(petState.name).color
 
     private fun HomeViewState.title(resources: Resources): String {
         val titles = resources.getStringArray(R.array.player_titles)

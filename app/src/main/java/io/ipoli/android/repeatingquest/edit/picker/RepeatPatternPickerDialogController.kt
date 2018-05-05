@@ -62,7 +62,7 @@ class RepeatPatternPickerDialogController :
         val view = inflater.inflate(R.layout.dialog_repeating_picker, null)
 
         view.rpWeekDayList.layoutManager =
-            LinearLayoutManager(activity!!, LinearLayoutManager.HORIZONTAL, false)
+                LinearLayoutManager(activity!!, LinearLayoutManager.HORIZONTAL, false)
         view.rpWeekDayList.adapter = WeekDayAdapter()
 
         view.rpMonthDayList.layoutManager = GridLayoutManager(activity, 7)
@@ -146,7 +146,7 @@ class RepeatPatternPickerDialogController :
         view: View,
         state: RepeatPatternViewState
     ) {
-        view.rpEnd.setOnClickListener {
+        view.rpEnd.onDebounceClick {
             val date = state.pickerEndDate
             val datePickerDialog = DatePickerDialog(
                 view.context, R.style.Theme_myPoli_AlertDialog,
@@ -174,7 +174,7 @@ class RepeatPatternPickerDialogController :
         view: View,
         state: RepeatPatternViewState
     ) {
-        view.rpStart.setOnClickListener {
+        view.rpStart.onDebounceClick {
             val date = state.startDate
             val datePickerDialog = DatePickerDialog(
                 view.context, R.style.Theme_myPoli_AlertDialog,
@@ -231,7 +231,7 @@ class RepeatPatternPickerDialogController :
 
         renderDayOfYear(view, state)
 
-        view.rpDayOfYear.setOnClickListener {
+        view.rpDayOfYear.onDebounceClick {
             val date = state.dayOfYear
             val datePickerDialog = DatePickerDialog(
                 view.context, R.style.Theme_myPoli_AlertDialog,
@@ -398,20 +398,20 @@ class RepeatPatternPickerDialogController :
         repeatType.setSelection(state.repeatTypeIndex)
         repeatType.post {
             repeatType.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-                    }
+                    object : AdapterView.OnItemSelectedListener {
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                        }
 
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-                        dispatch(RepeatPatternAction.ChangeFrequency(position))
-                    }
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            dispatch(RepeatPatternAction.ChangeFrequency(position))
+                        }
 
-                }
+                    }
         }
 
     }
@@ -463,7 +463,7 @@ class RepeatPatternPickerDialogController :
 
             button.setBackgroundResource(vm.background)
             button.setTextColor(vm.textColor)
-            button.dispatchOnClick(RepeatPatternAction.ToggleWeekDay(vm.weekDay))
+            button.dispatchOnClick { RepeatPatternAction.ToggleWeekDay(vm.weekDay) }
         }
 
         fun updateAll(viewModels: List<WeekDayViewModel>) {
@@ -500,7 +500,7 @@ class RepeatPatternPickerDialogController :
             view.text = vm.text
             view.setTextColor(vm.textColor)
             view.setBackgroundResource(vm.background)
-            view.dispatchOnClick(RepeatPatternAction.ToggleMonthDay(vm.day))
+            view.dispatchOnClick { RepeatPatternAction.ToggleMonthDay(vm.day) }
         }
 
         fun updateAll(viewModels: List<MonthDayViewModel>) {

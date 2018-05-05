@@ -57,7 +57,7 @@ class ChallengeListViewController(args: Bundle? = null) :
                 LinearLayoutManager(container.context, LinearLayoutManager.VERTICAL, false)
         view.challengeList.adapter = ChallengeAdapter()
 
-        view.addChallenge.dispatchOnClick(ChallengeListAction.AddChallenge)
+        view.addChallenge.dispatchOnClick { ChallengeListAction.AddChallenge }
         view.emptyAnimation.setAnimation("empty_challenge_list.json")
         return view
     }

@@ -198,7 +198,7 @@ open class EditChallengeViewController(args: Bundle? = null) :
 
     private fun renderNote(view: View, state: EditChallengeViewState) {
         view.challengeNote.text = state.noteText
-        view.challengeNote.setOnClickListener {
+        view.challengeNote.onDebounceClick {
             NoteDialogViewController(state.note, { note ->
                 dispatch(EditChallengeAction.ChangeNote(note))
             }).show(router)
@@ -210,7 +210,7 @@ open class EditChallengeViewController(args: Bundle? = null) :
         state: EditChallengeViewState
     ) {
         colorLayout(view, state)
-        view.challengeColor.setOnClickListener {
+        view.challengeColor.onDebounceClick {
             ColorPickerDialogController({
                 dispatch(EditChallengeAction.ChangeColor(it))
             }, state.color).show(
@@ -225,7 +225,7 @@ open class EditChallengeViewController(args: Bundle? = null) :
         state: EditChallengeViewState
     ) {
         view.challengeSelectedIcon.setImageDrawable(state.iconDrawable)
-        view.challengeIcon.setOnClickListener {
+        view.challengeIcon.onDebounceClick {
             IconPickerDialogController({ icon ->
                 dispatch(EditChallengeAction.ChangeIcon(icon))
             }, state.icon).show(
@@ -271,7 +271,7 @@ open class EditChallengeViewController(args: Bundle? = null) :
     ) {
         view.challengeEndDate.text = state.endDateText
         val date = state.end
-        view.challengeEndDate.setOnClickListener {
+        view.challengeEndDate.onDebounceClick {
             DatePickerDialog(
                 view.context, R.style.Theme_myPoli_AlertDialog,
                 DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
@@ -308,7 +308,7 @@ open class EditChallengeViewController(args: Bundle? = null) :
             view.challengeMotivation3.visibility = View.GONE
         }
 
-        view.challengeMotivations.setOnClickListener {
+        view.challengeMotivations.onDebounceClick {
             ChallengeMotivationsDialogController(
                 state.motivation1,
                 state.motivation2,

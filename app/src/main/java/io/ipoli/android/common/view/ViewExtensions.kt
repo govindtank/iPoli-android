@@ -1,6 +1,8 @@
 package io.ipoli.android.common.view
 
+import android.support.annotation.LayoutRes
 import android.support.constraint.Group
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
@@ -48,6 +50,14 @@ fun View.visible() {
     visibility = View.VISIBLE
 }
 
+fun View.enableClick() {
+    isClickable = true
+}
+
+fun View.disableClick() {
+    isClickable = false
+}
+
 fun View.visibleOrGone(isVisible: Boolean) {
     if (isVisible) visible()
     else gone()
@@ -55,3 +65,6 @@ fun View.visibleOrGone(isVisible: Boolean) {
 
 val ViewGroup.children: List<View>
     get() = 0.until(childCount).map { getChildAt(it) }
+
+fun ViewGroup.inflate(@LayoutRes layout: Int, attachToRoot: Boolean = false): View =
+    LayoutInflater.from(context).inflate(layout, this, attachToRoot)

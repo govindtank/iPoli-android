@@ -71,7 +71,7 @@ class AddQuestViewController(args: Bundle? = null) :
         })
 
         if(isFullscreen) {
-            view.setOnClickListener {
+            view.onDebounceClick {
                 ViewUtils.hideKeyboard(view)
                 closeListener()
             }
@@ -102,7 +102,7 @@ class AddQuestViewController(args: Bundle? = null) :
             true
         }
 
-        view.done.setOnClickListener {
+        view.done.onDebounceClick {
             onSaveQuest(view)
         }
 
@@ -192,7 +192,7 @@ class AddQuestViewController(args: Bundle? = null) :
 
     private fun renderTags(view: View, state: AddQuestViewState) {
         setIcon(MaterialDesignIconic.Icon.gmi_label, view.tags, state.tags.isNotEmpty())
-        view.tags.setOnClickListener {
+        view.tags.onDebounceClick {
             TagPickerDialogController(state.tags.toSet(), { tags ->
                 dispatch(AddQuestAction.TagsPicked(tags))
             }).show(router)
@@ -203,7 +203,7 @@ class AddQuestViewController(args: Bundle? = null) :
         view: View,
         state: AddQuestViewState
     ) {
-        view.fullAdd.setOnClickListener {
+        view.fullAdd.onDebounceClick {
             closeListener()
             ViewUtils.hideKeyboard(view)
             val fadeChangeHandler = FadeChangeHandler()
@@ -232,7 +232,7 @@ class AddQuestViewController(args: Bundle? = null) :
         state: AddQuestViewState
     ) {
         setIcon(GoogleMaterial.Icon.gmd_event, view.scheduleDate, state.date != null)
-        view.scheduleDate.setOnClickListener {
+        view.scheduleDate.onDebounceClick {
             val date = state.date ?: LocalDate.now()
             val datePickerDialog = DatePickerDialog(
                 view.context, R.style.Theme_myPoli_AlertDialog,
@@ -255,7 +255,7 @@ class AddQuestViewController(args: Bundle? = null) :
 
     private fun renderDuration(state: AddQuestViewState, view: View) {
         setIcon(GoogleMaterial.Icon.gmd_timer, view.duration, state.duration != null)
-        view.duration.setOnClickListener {
+        view.duration.onDebounceClick {
             DurationPickerDialogController(
                 state.duration,
                 { dispatch(AddQuestAction.DurationPicked(it)) }
@@ -284,7 +284,7 @@ class AddQuestViewController(args: Bundle? = null) :
                 useAccentColor = false
             )
         }
-        view.icon.setOnClickListener {
+        view.icon.onDebounceClick {
             IconPickerDialogController({ icon ->
                 dispatch(AddQuestAction.IconPicked(icon))
             }, state.icon).show(
@@ -301,7 +301,7 @@ class AddQuestViewController(args: Bundle? = null) :
         state.color?.let {
             setColor(state.color, view)
         }
-        view.color.setOnClickListener {
+        view.color.onDebounceClick {
             ColorPickerDialogController({
                 dispatch(AddQuestAction.ColorPicked(it))
             }, state.color).show(
@@ -316,7 +316,7 @@ class AddQuestViewController(args: Bundle? = null) :
         state: AddQuestViewState
     ) {
         setIcon(GoogleMaterial.Icon.gmd_access_time, view.startTime, state.time != null)
-        view.startTime.setOnClickListener {
+        view.startTime.onDebounceClick {
             val startTime = state.time ?: Time.now()
             val dialog = TimePickerDialog(
                 view.context,

@@ -127,7 +127,7 @@ class AuthViewController(args: Bundle? = null) :
     override fun render(state: AuthViewState, view: View) {
 
         view.startJourney.setOnClickListener {
-            if(state.type != USERNAME_VALIDATION_ERROR) {
+            if (state.type != USERNAME_VALIDATION_ERROR) {
                 view.startJourney.isClickable = false
                 dispatch(
                     AuthAction.CompleteSetup(
@@ -408,7 +408,7 @@ class AuthViewController(args: Bundle? = null) :
             view.avatarImage.setBackgroundResource(vm.backgroundColor)
             view.avatarImage.setImageResource(vm.image)
             if (!vm.isSelected) {
-                view.avatarImage.dispatchOnClick(AuthAction.ChangeAvatar(vm.avatar))
+                view.avatarImage.dispatchOnClick { AuthAction.ChangeAvatar(vm.avatar) }
                 view.avatarImageSelected.gone()
             } else {
                 view.avatarImage.setOnClickListener(null)

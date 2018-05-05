@@ -8,7 +8,7 @@ import io.ipoli.android.common.mvi.ViewState
 import io.ipoli.android.common.redux.Action
 import io.ipoli.android.pet.AndroidPetAvatar
 import io.ipoli.android.pet.PetAvatar
-import io.ipoli.android.pet.PetMood
+import io.ipoli.android.pet.PetState
 import io.ipoli.android.player.Player
 
 /**
@@ -142,7 +142,7 @@ fun PetStoreViewState.PetModel.toAndroidPetModel(): PetStoreViewController.PetVi
                 price = avatar.gemPrice.toString(),
                 description = androidAvatar.description,
                 actionText = null,
-                moodImage = androidAvatar.moodImage[PetMood.HAPPY]!!,
+                moodImage = androidAvatar.stateImage[PetState.HAPPY]!!,
                 showAction = false,
                 showIsCurrent = true,
                 action = null
@@ -157,7 +157,7 @@ fun PetStoreViewState.PetModel.toAndroidPetModel(): PetStoreViewController.PetVi
                 price = avatar.gemPrice.toString(),
                 description = androidAvatar.description,
                 actionText = R.string.store_pet_in_inventory,
-                moodImage = androidAvatar.moodImage[PetMood.GOOD]!!,
+                moodImage = androidAvatar.stateImage[PetState.GOOD]!!,
                 showAction = true,
                 showIsCurrent = false,
                 action = PetStoreViewController.PetViewModel.Action.CHANGE
@@ -172,7 +172,7 @@ fun PetStoreViewState.PetModel.toAndroidPetModel(): PetStoreViewController.PetVi
                 price = avatar.gemPrice.toString(),
                 description = androidAvatar.description,
                 actionText = R.string.unlock,
-                moodImage = androidAvatar.moodImage[PetMood.GOOD]!!,
+                moodImage = androidAvatar.stateImage[PetState.GOOD]!!,
                 showAction = true,
                 showIsCurrent = false,
                 action = PetStoreViewController.PetViewModel.Action.UNLOCK
@@ -187,7 +187,7 @@ fun PetStoreViewState.PetModel.toAndroidPetModel(): PetStoreViewController.PetVi
                 price = avatar.gemPrice.toString(),
                 description = androidAvatar.description,
                 actionText = R.string.store_buy_pet,
-                moodImage = androidAvatar.moodImage[PetMood.GOOD]!!,
+                moodImage = androidAvatar.stateImage[PetState.GOOD]!!,
                 showAction = true,
                 showIsCurrent = false,
                 action = PetStoreViewController.PetViewModel.Action.BUY

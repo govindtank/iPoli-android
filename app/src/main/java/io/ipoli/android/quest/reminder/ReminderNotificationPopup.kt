@@ -62,7 +62,7 @@ class ReminderNotificationPopup(
             startTimeMessage.text = viewModel.startTimeMessage
             val petAvatar = AndroidPetAvatar.valueOf(viewModel.pet.avatar.name)
             pet.setImageResource(petAvatar.image)
-            petState.setImageResource(petAvatar.moodImage[viewModel.pet.mood]!!)
+            petState.setImageResource(petAvatar.stateImage[viewModel.pet.state]!!)
         }
         initButtons()
     }

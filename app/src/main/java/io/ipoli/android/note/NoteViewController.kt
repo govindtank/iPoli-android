@@ -53,7 +53,8 @@ class NoteViewController(args: Bundle? = null) :
         return view
     }
 
-    override fun onCreateLoadAction() = NoteAction.Load(note, startInEditMode, closeListener != null)
+    override fun onCreateLoadAction() =
+        NoteAction.Load(note, startInEditMode, closeListener != null)
 
     override fun colorLayoutBars() {
 
@@ -67,7 +68,7 @@ class NoteViewController(args: Bundle? = null) :
             VIEW -> {
                 view.noteAction.invisible()
                 view.noteText.setMarkdown(state.text)
-                view.editNote.dispatchOnClick(NoteAction.Edit)
+                view.editNote.dispatchOnClick { NoteAction.Edit }
                 renderClose(state, view)
 
                 if (state.isPreview) {
@@ -132,7 +133,7 @@ class NoteViewController(args: Bundle? = null) :
             dispatch(NoteAction.Save(note))
         }
 
-        view.editNote.dispatchOnClick(NoteAction.Edit)
+        view.editNote.dispatchOnClick { NoteAction.Edit }
         ViewUtils.hideKeyboard(view)
         view.noteText.setMarkdown(state.text)
         view.editNoteText.animate().apply {

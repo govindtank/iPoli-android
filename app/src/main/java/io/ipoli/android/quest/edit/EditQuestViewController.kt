@@ -125,7 +125,7 @@ class EditQuestViewController(args: Bundle? = null) :
 
         view.questSubQuestName.addTextChangedListener(newSubQuestWatcher)
 
-        view.questAddSubQuest.setOnClickListener {
+        view.questAddSubQuest.onDebounceClick {
             addSubQuest(view)
         }
 
@@ -304,7 +304,7 @@ class EditQuestViewController(args: Bundle? = null) :
         state: EditQuestViewState
     ) {
         view.questChallenge.text = state.challengeText
-        view.questChallenge.setOnClickListener {
+        view.questChallenge.onDebounceClick {
             ChallengePickerDialogController(state.challenge, { challenge ->
                 dispatch(EditQuestAction.ChangeChallenge(challenge))
             }).show(router)
@@ -316,7 +316,7 @@ class EditQuestViewController(args: Bundle? = null) :
         state: EditQuestViewState
     ) {
         view.questScheduleDate.text = state.scheduleDateText
-        view.questScheduleDate.setOnClickListener {
+        view.questScheduleDate.onDebounceClick {
             val date = state.scheduleDate ?: LocalDate.now()
             val datePickerDialog = DatePickerDialog(
                 view.context, R.style.Theme_myPoli_AlertDialog,
@@ -337,7 +337,7 @@ class EditQuestViewController(args: Bundle? = null) :
         state: EditQuestViewState
     ) {
         view.questDuration.text = state.durationText
-        view.questDuration.setOnClickListener {
+        view.questDuration.onDebounceClick {
             DurationPickerDialogController(
                 state.duration,
                 { dispatch(EditQuestAction.ChangeDuration(it)) }
@@ -350,7 +350,7 @@ class EditQuestViewController(args: Bundle? = null) :
         state: EditQuestViewState
     ) {
         view.questStartTime.text = state.startTimeText
-        view.questStartTime.setOnClickListener {
+        view.questStartTime.onDebounceClick {
             val startTime = state.startTime ?: Time.now()
             val dialog = TimePickerDialog(
                 view.context,
@@ -381,7 +381,7 @@ class EditQuestViewController(args: Bundle? = null) :
         state: EditQuestViewState
     ) {
         colorLayout(view, state)
-        view.questColor.setOnClickListener {
+        view.questColor.onDebounceClick {
             ColorPickerDialogController({
                 dispatch(EditQuestAction.ChangeColor(it))
             }, state.color).show(
@@ -396,7 +396,7 @@ class EditQuestViewController(args: Bundle? = null) :
         state: EditQuestViewState
     ) {
         view.questSelectedIcon.setImageDrawable(state.iconDrawable)
-        view.questIcon.setOnClickListener {
+        view.questIcon.onDebounceClick {
             IconPickerDialogController({ icon ->
                 dispatch(EditQuestAction.ChangeIcon(icon))
             }, state.icon).show(
@@ -424,7 +424,7 @@ class EditQuestViewController(args: Bundle? = null) :
         state: EditQuestViewState
     ) {
         view.questReminder.text = state.reminderText
-        view.questReminder.setOnClickListener {
+        view.questReminder.onDebounceClick {
             ReminderPickerDialogController(object :
                 ReminderPickerDialogController.ReminderPickedListener {
                 override fun onReminderPicked(reminder: ReminderViewModel?) {
@@ -438,7 +438,7 @@ class EditQuestViewController(args: Bundle? = null) :
 
     private fun renderNote(view: View, state: EditQuestViewState) {
         view.questNote.text = state.noteText
-        view.questNote.setOnClickListener {
+        view.questNote.onDebounceClick {
             NoteDialogViewController(
                 note = state.note,
                 resultListener = { note ->

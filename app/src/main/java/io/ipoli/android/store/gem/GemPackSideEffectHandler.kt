@@ -46,7 +46,7 @@ object GemPackSideEffectHandler : AppSideEffectHandler() {
                     )
                 )
 
-            is GemStoreAction.BuyGemPack ->
+            is GemStoreAction.BuyGemPack -> {
                 inAppPurchaseManager.purchase(
                     action.gemPack.type,
                     object : InAppPurchaseManager.PurchaseListener {
@@ -62,6 +62,7 @@ object GemPackSideEffectHandler : AppSideEffectHandler() {
                         }
 
                     })
+            }
         }
     }
 

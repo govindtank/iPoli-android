@@ -7,7 +7,7 @@ import io.ipoli.android.common.home.HomeViewState.StateType.*
 import io.ipoli.android.common.mvi.ViewState
 import io.ipoli.android.common.redux.Action
 import io.ipoli.android.pet.PetAvatar
-import io.ipoli.android.pet.PetMood
+import io.ipoli.android.pet.PetState
 import io.ipoli.android.player.Player
 import io.ipoli.android.player.data.Avatar
 import io.ipoli.android.tag.Tag
@@ -81,7 +81,7 @@ object HomeReducer : BaseViewStateReducer<HomeViewState>() {
             showSignIn = !player.isLoggedIn(),
             avatar = player.avatar,
             petAvatar = player.pet.avatar,
-            petMood = player.pet.mood,
+            petState = player.pet.state,
             gems = player.gems,
             lifeCoins = player.coins,
             experience = player.experience,
@@ -98,7 +98,7 @@ object HomeReducer : BaseViewStateReducer<HomeViewState>() {
         level = 0,
         avatar = Avatar.AVATAR_00,
         petAvatar = PetAvatar.ELEPHANT,
-        petMood = PetMood.AWESOME,
+        petState = PetState.AWESOME,
         gems = 0,
         lifeCoins = 0,
         experience = 0,
@@ -118,7 +118,7 @@ data class HomeViewState(
     val level: Int,
     val avatar: Avatar,
     val petAvatar: PetAvatar,
-    val petMood: PetMood,
+    val petState: PetState,
     val gems: Int,
     val lifeCoins: Int,
     val experience: Long,

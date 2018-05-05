@@ -168,7 +168,7 @@ class PowerUpStoreViewController(args: Bundle? = null) :
             view.membershipHint.gone()
         }
 
-        view.join.setOnClickListener {
+        view.join.onDebounceClick {
             router.pushController(RouterTransaction.with(MembershipViewController()))
         }
 

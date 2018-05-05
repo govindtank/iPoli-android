@@ -59,7 +59,7 @@ class ChallengeListForCategoryViewController :
 
         view.toolbarTitle.setText(androidChallengeCategory.title)
         view.challengeList.layoutManager =
-            LinearLayoutManager(container.context, LinearLayoutManager.VERTICAL, false)
+                LinearLayoutManager(container.context, LinearLayoutManager.VERTICAL, false)
         view.challengeList.adapter = ChallengeAdapter()
 
         setChildController(view.playerGems, InventoryViewController())
@@ -161,11 +161,11 @@ class ChallengeListForCategoryViewController :
                     )
                 }
 
-                itemView.dispatchOnClick(
+                itemView.dispatchOnClick {
                     ChallengeListForCategoryAction.BuyChallenge(
                         vm.challenge
                     )
-                )
+                }
             } else {
                 itemView.setOnClickListener {
                     showChallenge(vm.challenge)

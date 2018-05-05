@@ -88,7 +88,7 @@ object PetReducer : BaseViewStateReducer<PetViewState>() {
                     type = PET_FED,
                     food = action.food,
                     wasFoodTasty = action.wasFoodTasty,
-                    mood = pet.mood,
+                    state = pet.state,
                     isDead = pet.isDead
                 )
             }
@@ -188,7 +188,7 @@ object PetReducer : BaseViewStateReducer<PetViewState>() {
 
         val newState = state.copy(
             petName = pet.name,
-            stateName = pet.mood.name.toLowerCase().capitalize(),
+            stateName = pet.state.name.toLowerCase().capitalize(),
             equippedHat = equipment.hat,
             equippedMask = equipment.mask,
             equippedBodyArmor = equipment.bodyArmor,
@@ -198,7 +198,7 @@ object PetReducer : BaseViewStateReducer<PetViewState>() {
             xpBonus = pet.experienceBonus,
             unlockChanceBonus = pet.itemDropBonus,
             avatar = pet.avatar,
-            mood = pet.mood,
+            state = pet.state,
             isDead = pet.isDead,
             playerGems = player.gems,
             inventoryFood = food,
@@ -280,7 +280,7 @@ data class PetViewState(
     val xpBonus: Float = 0f,
     val unlockChanceBonus: Float = 0f,
     val avatar: PetAvatar? = null,
-    val mood: PetMood? = null,
+    val state: PetState? = null,
     val isDead: Boolean = false,
     val equippedHat: PetItem?,
     val equippedMask: PetItem?,

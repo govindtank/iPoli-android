@@ -36,7 +36,6 @@ import kotlinx.android.synthetic.main.controller_pet.view.*
 import kotlinx.android.synthetic.main.item_pet_food.view.*
 import kotlinx.android.synthetic.main.item_pet_item.view.*
 import kotlinx.android.synthetic.main.view_inventory_toolbar.view.*
-import timber.log.Timber
 
 
 /**
@@ -178,11 +177,7 @@ class PetViewController(args: Bundle? = null) :
                     R.string.pet_not_tasty_food_response
                 view.petResponse.setText(responseRes)
                 val avatar = AndroidPetAvatar.valueOf(state.avatar!!.name)
-                if (state.isDead) {
-                    view.petState.setImageResource(avatar.deadStateImage)
-                } else {
-                    view.petState.setImageResource(avatar.moodImage[state.mood]!!)
-                }
+                view.petState.setImageResource(avatar.stateImage[state.state]!!)
                 playFeedPetAnimation(view, state)
             }
 
@@ -644,7 +639,7 @@ class PetViewController(args: Bundle? = null) :
             view.reviveContainer.visibility = View.VISIBLE
             view.compareItemsContainer.visibility = View.GONE
             view.statsContainer.visibility = View.GONE
-            view.petState.setImageResource(avatar.deadStateImage)
+            view.petState.setImageResource(avatar.stateImage[state.state]!!)
 
             view.reviveHint.text = stringRes(R.string.revive_hint, state.petName)
             view.reviveCost.text = state.reviveCost.toString()
@@ -671,7 +666,7 @@ class PetViewController(args: Bundle? = null) :
             view.coinBonus.text = "+ %.2f".format(state.coinsBonus) + "%"
             view.xpBonus.text = "+ %.2f".format(state.xpBonus) + "%"
             view.unlockChanceBonus.text = "+ %.2f".format(state.unlockChanceBonus) + "%"
-            view.petState.setImageResource(avatar.moodImage[state.mood]!!)
+            view.petState.setImageResource(avatar.stateImage[state.state]!!)
             ViewUtils.showViews(view.hat, view.mask, view.bodyArmor)
         } else {
             ViewUtils.showViews(view.hat, view.mask, view.bodyArmor)
@@ -730,11 +725,11 @@ class PetViewController(args: Bundle? = null) :
                     return
                 }
                 val avatar = AndroidPetAvatar.valueOf(state.avatar!!.name)
-                val stateImage = avatar.moodImage[state.mood]!!
+                val stateImage = avatar.stateImage[state.state]!!
                 val responseStateImage = if (state.wasFoodTasty)
-                    avatar.moodImage[PetMood.AWESOME]!!
+                    avatar.stateImage[PetState.AWESOME]!!
                 else
-                    avatar.deadStateImage
+                    avatar.stateImage[PetState.DEAD]!!
                 playFeedPetResponseAnimation(view, stateImage, responseStateImage)
             }
         })

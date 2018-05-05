@@ -154,7 +154,7 @@ class AddChallengeViewController(args: Bundle? = null) :
     private val EditChallengeViewState.toolbarTitle: String
         get() = when (adapterPosition) {
             NAME_INDEX -> "New Challenge"
-            MOTIVATION_INDEX -> "Thoughts to motivate you later"
+            MOTIVATION_INDEX -> "Motivations to do it"
             END_DATE_INDEX -> "Achieve it in"
             QUEST_PICKER_INDEX -> "Add some quests"
             SUMMARY_INDEX -> "Summary"

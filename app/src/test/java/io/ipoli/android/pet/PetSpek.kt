@@ -34,7 +34,7 @@ class PetSpek : Spek({
             val p = pet.copy(
                 healthPoints = Pet.MAX_HP,
                 moodPoints = Pet.MAX_MP,
-                mood = PetMood.AWESOME
+                state = PetState.AWESOME
             )
             val newPet = p.rewardFor(reward)
             newPet.healthPoints.`should be equal to`(Pet.MAX_HP)
@@ -45,7 +45,7 @@ class PetSpek : Spek({
             val sickPet = pet.copy(
                 healthPoints = 30,
                 moodPoints = 60,
-                mood = PetMood.GOOD
+                state = PetState.GOOD
             )
 
             val normalIncrease = sickPet.rewardFor(reward).moodPoints - sickPet.moodPoints
@@ -58,9 +58,9 @@ class PetSpek : Spek({
             val newPet = pet.copy(
                 healthPoints = 89,
                 moodPoints = 89,
-                mood = PetMood.HAPPY
+                state = PetState.HAPPY
             ).rewardFor(reward)
-            newPet.mood.`should be`(PetMood.AWESOME)
+            newPet.state.`should be`(PetState.AWESOME)
             newPet.experienceBonus.`should be equal to`(Pet.MAX_XP_BONUS)
             newPet.coinBonus.`should be equal to`(Pet.MAX_COIN_BONUS)
             newPet.itemDropBonus.`should be equal to`(Pet.MAX_BOUNTY_BONUS)
@@ -70,9 +70,9 @@ class PetSpek : Spek({
             val newPet = pet.copy(
                 healthPoints = Pet.MAX_HP,
                 moodPoints = Pet.AWESOME_MIN_MOOD_POINTS,
-                mood = PetMood.AWESOME
+                state = PetState.AWESOME
             ).removeReward(reward)
-            newPet.mood.`should be`(PetMood.HAPPY)
+            newPet.state.`should be`(PetState.HAPPY)
         }
 
         describe("update health and mood points") {
@@ -81,7 +81,7 @@ class PetSpek : Spek({
                 val newPet = TestUtil.player().pet.copy(
                     healthPoints = 10,
                     moodPoints = 10,
-                    mood = PetMood.SAD
+                    state = PetState.SAD
                 ).updateHealthAndMoodPoints(-20, 0)
                 newPet.healthPoints.`should be equal to`(0)
             }
@@ -90,7 +90,7 @@ class PetSpek : Spek({
                 val newPet = TestUtil.player().pet.copy(
                     healthPoints = Pet.MAX_HP,
                     moodPoints = 10,
-                    mood = PetMood.SAD
+                    state = PetState.SAD
                 ).updateHealthAndMoodPoints(0, -20)
                 newPet.moodPoints.`should be equal to`(0)
             }
@@ -99,7 +99,7 @@ class PetSpek : Spek({
                 val newPet = TestUtil.player().pet.copy(
                     healthPoints = Pet.MAX_HP,
                     moodPoints = 10,
-                    mood = PetMood.SAD
+                    state = PetState.SAD
                 ).updateHealthAndMoodPoints(-20, 20)
                 newPet.healthPoints.`should be equal to`(Pet.MAX_HP - 20)
                 newPet.moodPoints.`should be equal to`(30)
@@ -109,12 +109,12 @@ class PetSpek : Spek({
                 val newPet = TestUtil.player().pet.copy(
                     healthPoints = 10,
                     moodPoints = 10,
-                    mood = PetMood.SAD
+                    state = PetState.SAD
                 ).updateHealthAndMoodPoints(-20, 0)
                 newPet.isDead.`should be true`()
                 newPet.healthPoints.`should be equal to`(0)
                 newPet.moodPoints.`should be equal to`(0)
-                newPet.mood.`should be`(PetMood.SAD)
+                newPet.state.`should be`(PetState.SAD)
                 newPet.experienceBonus.`should be equal to`(0f)
                 newPet.coinBonus.`should be equal to`(0f)
                 newPet.itemDropBonus.`should be equal to`(0f)
@@ -124,9 +124,9 @@ class PetSpek : Spek({
                 val newPet = TestUtil.player().pet.copy(
                     healthPoints = 20,
                     moodPoints = 50,
-                    mood = PetMood.GOOD
+                    state = PetState.GOOD
                 ).updateHealthAndMoodPoints(-10, -10)
-                newPet.mood.`should be`(PetMood.SAD)
+                newPet.state.`should be`(PetState.SAD)
             }
         }
     }

@@ -61,7 +61,10 @@ class ScheduleViewController(args: Bundle? = null) :
             initDayPicker(view, calendarToolbar)
         }
 
-        setChildController(view.contentContainer, CalendarViewController(LocalDate.now()))
+        setChildController(
+            view.contentContainer,
+            CalendarViewController(LocalDate.now())
+        )
 
         return view
     }
@@ -128,8 +131,8 @@ class ScheduleViewController(args: Bundle? = null) :
 
         view.datePicker.markDate(dateData)
 
-        calendarToolbar.dispatchOnClick(ScheduleAction.ExpandToolbar)
-        view.expander.dispatchOnClick(ScheduleAction.ExpandWeekToolbar)
+        calendarToolbar.dispatchOnClick { ScheduleAction.ExpandToolbar }
+        view.expander.dispatchOnClick { ScheduleAction.ExpandWeekToolbar }
 
         view.datePicker.setOnDateClickListener(object : OnDateClickListener() {
             override fun onDateClick(v: View, date: DateData) {
@@ -156,9 +159,9 @@ class ScheduleViewController(args: Bundle? = null) :
         })
     }
 
+
     override fun render(state: ScheduleViewState, view: View) {
-        calendarToolbar.day.text = state.dayText(activity!!)
-        calendarToolbar.date.text = state.dateText(activity!!)
+
         view.currentMonth.text = state.monthText
 
         view.addQuest.setOnClickListener {
@@ -166,6 +169,11 @@ class ScheduleViewController(args: Bundle? = null) :
         }
 
         when (state.type) {
+
+            INITIAL -> {
+
+                renderCalendarToolbar(state)
+            }
 
             DATE_PICKER_CHANGED -> renderDatePicker(
                 state.datePickerState,
@@ -190,13 +198,17 @@ class ScheduleViewController(args: Bundle? = null) :
                     view,
                     state.currentDate
                 )
+                renderCalendarToolbar(state)
             }
 
-            CALENDAR_DATE_CHANGED ->
+            CALENDAR_DATE_CHANGED -> {
                 markSelectedDate(view, state.currentDate)
+                renderCalendarToolbar(state)
+            }
 
             SWIPE_DATE_CHANGED -> {
                 markSelectedDate(view, state.currentDate)
+                renderCalendarToolbar(state)
             }
 
             VIEW_MODE_CHANGED -> {
@@ -219,6 +231,11 @@ class ScheduleViewController(args: Bundle? = null) :
                 activity?.invalidateOptionsMenu()
             }
         }
+    }
+
+    private fun renderCalendarToolbar(state: ScheduleViewState) {
+        calendarToolbar.day.text = state.dayText(activity!!)
+        calendarToolbar.date.text = state.dateText(activity!!)
     }
 
     private fun renderDatePicker(

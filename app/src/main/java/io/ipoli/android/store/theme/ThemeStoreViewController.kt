@@ -162,13 +162,13 @@ class ThemeStoreViewController(args: Bundle? = null) :
                     action.visible = true
                     current.visible = false
                     action.text = stringRes(R.string.pick_me)
-                    action.dispatchOnClick(ThemeStoreAction.Change(item.theme))
+                    action.dispatchOnClick { ThemeStoreAction.Change(item.theme) }
                 }
                 else -> {
                     action.visible = true
                     current.visible = false
                     action.text = stringRes(R.string.store_buy_theme)
-                    action.dispatchOnClick(ThemeStoreAction.Buy(item.theme))
+                    action.dispatchOnClick { ThemeStoreAction.Buy(item.theme) }
                 }
             }
 
@@ -182,7 +182,7 @@ class ThemeStoreViewController(args: Bundle? = null) :
 
             view.themeCalendar.timeLine.setBackgroundColor(item.accentColor)
             view.themeCalendar.timeLineIndicator.backgroundTintList =
-                ColorStateList.valueOf(item.accentColor)
+                    ColorStateList.valueOf(item.accentColor)
 
             view.themeCalendar.scrollToNow()
         }

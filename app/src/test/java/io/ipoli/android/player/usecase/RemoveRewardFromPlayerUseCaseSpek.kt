@@ -72,7 +72,7 @@ class RemoveRewardFromPlayerUseCaseSpek : Spek({
             val petReward = pet.removeReward(newQuest)
             newPet.healthPoints.`should be equal to`(petReward.healthPoints)
             newPet.moodPoints.`should be equal to`(petReward.moodPoints)
-            newPet.mood.`should be`(petReward.mood)
+            newPet.state.`should be`(petReward.state)
             newPet.experienceBonus.`should be equal to`(petReward.experienceBonus)
             newPet.coinBonus.`should be equal to`(petReward.coinBonus)
             newPet.itemDropBonus.`should be equal to`(petReward.itemDropBonus)

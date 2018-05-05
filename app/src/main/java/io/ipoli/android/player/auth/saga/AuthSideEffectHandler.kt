@@ -187,7 +187,7 @@ object AuthSideEffectHandler : AppSideEffectHandler() {
             imageUrl = user.photoUrl
         )
 
-    private suspend fun createNewPlayer(
+    private fun createNewPlayer(
         user: FirebaseUser
     ) {
 
