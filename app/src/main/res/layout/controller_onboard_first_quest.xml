@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:backgroundTint="@android:color/transparent"
-            android:hint="E.g. Prepare my presentation"
+            android:hint="Your first Quest name"
             android:imeOptions="actionDone"
             android:inputType="textCapSentences"
             android:paddingEnd="16dp"

@@ -1,6 +1,8 @@
 package io.ipoli.android.onboarding
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +34,6 @@ import kotlinx.android.synthetic.main.controller_onboard_first_quest.view.*
 import kotlinx.android.synthetic.main.controller_onboard_avatar.view.*
 import kotlinx.android.synthetic.main.controller_onboard_pet.view.*
 import kotlinx.android.synthetic.main.controller_onboard_story.view.*
-import timber.log.Timber
 
 sealed class OnboardAction : Action {
     data class SelectAvatar(val index: Int) : OnboardAction()
@@ -288,18 +289,42 @@ class OnboardViewController(args: Bundle? = null) :
 
         override val stateKey = OnboardReducer.stateKey
 
+        private val nameWatcher = object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                if(s.length > 2) {
+                    view!!.saveQuest.visible()
+                } else {
+                    view!!.saveQuest.gone()
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+        }
+
         override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup,
             savedViewState: Bundle?
         ): View {
             val view = container.inflate(R.layout.controller_onboard_first_quest)
+
             view.saveQuest.setImageDrawable(
-                IconicsDrawable(activity!!).normalIcon(
-                    GoogleMaterial.Icon.gmd_send,
-                    R.color.md_dark_text_54
-                ).respectFontBounds(true)
+                IconicsDrawable(activity!!)
+                    .icon(GoogleMaterial.Icon.gmd_send)
+                    .color(attrData(R.attr.colorAccent))
+                    .sizeDp(24)
+                    .respectFontBounds(true)
             )
+            view.saveQuest.gone()
+
+            view.questName.addTextChangedListener(nameWatcher)
 
             view.calendar.setHourAdapter(object : CalendarDayView.HourCellAdapter {
                 override fun bind(view: View, hour: Int) {
@@ -328,7 +353,6 @@ class OnboardViewController(args: Bundle? = null) :
                     showcase.dismiss()
                     view.addQuest.gone()
                     view.addQuestContainer.visible()
-                    view.saveQuest.visible()
                     view.addContainerBackground.visible()
                     view.questName.requestFocus()
                     ViewUtils.showKeyboard(view.context, view.questName)
