@@ -15,6 +15,7 @@ import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.view.*
 import android.widget.RelativeLayout
+import com.google.firebase.components.Dependency.required
 import io.ipoli.android.R
 import io.ipoli.android.common.AppState
 import io.ipoli.android.common.NamespaceAction
@@ -520,6 +521,208 @@ abstract class ReduxPopup<A : Action, VS : ViewState, out VSR : ViewStateReducer
             NamespaceAction(action, it)
         } ?: action
         stateStore.dispatch(a)
+    }
+
+    internal object WindowOverlayCompat {
+        private const val ANDROID_OREO = 26
+        private const val TYPE_APPLICATION_OVERLAY = 2038
+
+        val TYPE_SYSTEM_ERROR =
+            if (Build.VERSION.SDK_INT < ANDROID_OREO) WindowManager.LayoutParams.TYPE_SYSTEM_ERROR else TYPE_APPLICATION_OVERLAY
+    }
+}
+
+abstract class Popup
+    (
+    private val isAutoHide: Boolean = false,
+    private val position: Position = Position.CENTER,
+    @DrawableRes private val overlayBackground: Int? = R.color.md_dark_text_12
+) {
+
+    enum class Position {
+
+        CENTER, TOP, BOTTOM
+    }
+
+    private lateinit var overlayView: PopupBackgroundLayout
+    private lateinit var contentView: ViewGroup
+    private lateinit var windowManager: WindowManager
+    private val autoHideHandler = Handler(Looper.getMainLooper())
+
+    private val autoHideRunnable = {
+        hide()
+    }
+
+    abstract fun createView(inflater: LayoutInflater): View
+
+    fun show(context: Context) {
+
+        contentView = createView(LayoutInflater.from(context)) as ViewGroup
+        contentView.visibility = View.INVISIBLE
+
+        overlayView = PopupBackgroundLayout(context)
+        overlayView.layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+
+        overlayBackground?.let {
+            overlayView.setBackgroundResource(it)
+        }
+
+        val contentLp = when (position) {
+            Position.CENTER -> {
+                val lp = RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.MATCH_PARENT
+                )
+                lp.marginStart = ViewUtils.dpToPx(32f, context).toInt()
+                lp.marginEnd = ViewUtils.dpToPx(32f, context).toInt()
+                lp.addRule(
+                    RelativeLayout.CENTER_IN_PARENT,
+                    RelativeLayout.TRUE
+                )
+                lp
+            }
+            Position.TOP -> {
+                val lp = RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT
+                )
+                lp.marginStart = ViewUtils.dpToPx(16f, context).toInt()
+                lp.marginEnd = ViewUtils.dpToPx(16f, context).toInt()
+                lp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE)
+                lp.topMargin = ViewUtils.dpToPx(24f, context).toInt()
+                lp
+            }
+            else -> {
+                val lp = RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT
+                )
+                lp.marginStart = ViewUtils.dpToPx(16f, context).toInt()
+                lp.marginEnd = ViewUtils.dpToPx(16f, context).toInt()
+                lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
+                lp.bottomMargin = ViewUtils.dpToPx(24f, context).toInt()
+                lp
+            }
+        }
+
+        overlayView.addView(contentView, contentLp)
+
+        overlayView.setOnBackPressed {
+            if (!isAutoHide) {
+                hide()
+            }
+        }
+        if (!isAutoHide) {
+            overlayView.setOnClickListener { hide() }
+        }
+
+        windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+        addViewToWindowManager(overlayView)
+        overlayView.post {
+            playEnterAnimation(contentView)
+        }
+    }
+
+    protected open fun playEnterAnimation(contentView: View) {
+        val transAnim = ObjectAnimator.ofFloat(
+            contentView,
+            "y",
+            getScreenHeight(contentView.context).toFloat(),
+            contentView.y
+        )
+        val fadeAnim = ObjectAnimator.ofFloat(contentView, "alpha", 0f, 1f)
+        transAnim.duration =
+                contentView.context.resources.getInteger(android.R.integer.config_mediumAnimTime)
+                    .toLong()
+        fadeAnim.duration =
+                contentView.context.resources.getInteger(android.R.integer.config_longAnimTime)
+                    .toLong()
+        val animSet = AnimatorSet()
+        animSet.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationStart(animation: Animator) {
+                contentView.visible = true
+            }
+
+            override fun onAnimationEnd(animation: Animator) {
+                onViewShown(contentView)
+            }
+        })
+        animSet.playTogether(transAnim, fadeAnim)
+        animSet.start()
+    }
+
+    protected open fun onViewShown(contentView: View) {
+
+    }
+
+    protected open fun playExitAnimation(contentView: View) {
+        val transAnim = ObjectAnimator.ofFloat(
+            contentView,
+            "y",
+            contentView.y,
+            getScreenHeight(contentView.context).toFloat()
+        )
+        val fadeAnim = ObjectAnimator.ofFloat(contentView, "alpha", 1f, 0f)
+        transAnim.duration =
+                contentView.context.resources.getInteger(android.R.integer.config_shortAnimTime)
+                    .toLong()
+        fadeAnim.duration =
+                contentView.context.resources.getInteger(android.R.integer.config_mediumAnimTime)
+                    .toLong()
+        val animSet = AnimatorSet()
+        animSet.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                onDestroy()
+            }
+        })
+        animSet.playTogether(transAnim, fadeAnim)
+        animSet.start()
+    }
+
+    private fun onDestroy() {
+        windowManager.removeViewImmediate(overlayView)
+    }
+
+    private fun addViewToWindowManager(view: ViewGroup) {
+        val focusable =
+            WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED.or(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
+                .or(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL)
+
+        val metrics = DisplayMetrics()
+        windowManager.defaultDisplay.getRealMetrics(metrics)
+
+        val layoutParams = WindowManager.LayoutParams(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowOverlayCompat.TYPE_SYSTEM_ERROR,
+            focusable,
+            PixelFormat.TRANSLUCENT
+        )
+
+        windowManager.addView(view, layoutParams)
+    }
+
+    protected fun getScreenHeight(context: Context): Int {
+        val metrics = DisplayMetrics()
+        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        wm.defaultDisplay.getMetrics(metrics)
+        return metrics.heightPixels
+    }
+
+    protected fun autoHideAfter(millis: Long) {
+        require(isAutoHide)
+        autoHideHandler.postDelayed(autoHideRunnable, millis)
+    }
+
+    fun hide() {
+        autoHideHandler.removeCallbacksAndMessages(null)
+        overlayView.setOnClickListener(null)
+        overlayView.isClickable = false
+        playExitAnimation(contentView)
     }
 
     internal object WindowOverlayCompat {
