@@ -18,7 +18,6 @@ import android.widget.ImageView
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
-import com.github.florent37.tutoshowcase.TutoShowcase
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.google_material_typeface_library.GoogleMaterial
 import com.mikepenz.iconics.IconicsDrawable
@@ -50,7 +49,6 @@ import kotlinx.android.synthetic.main.controller_onboard_story.view.*
 import kotlinx.android.synthetic.main.item_calendar_quest.view.*
 import kotlinx.android.synthetic.main.popup_quest_complete.view.*
 import kotlinx.android.synthetic.main.view_default_toolbar.view.*
-import java.util.*
 
 sealed class OnboardAction : Action {
     data class SelectAvatar(val index: Int) : OnboardAction()
@@ -299,78 +297,6 @@ class OnboardViewController(args: Bundle? = null) :
 
     }
 
-    class FirstQuestCompletePopup(
-        @DrawableRes private val petImage: Int,
-        private val earnedXP: Int,
-        private val earnedCoins: Int
-    ) : Popup(
-        position = Popup.Position.BOTTOM,
-        isAutoHide = false,
-        overlayBackground = null
-    ) {
-        override fun createView(inflater: LayoutInflater): View {
-            val view = inflater.inflate(R.layout.popup_quest_complete, null)
-
-            return view
-        }
-
-        override fun onViewShown(contentView: View) {
-            super.onViewShown(contentView)
-
-            contentView.pet.setImageResource(petImage)
-            startTypingAnimation(contentView)
-        }
-
-        private fun startTypingAnimation(contentView: View) {
-            val title = contentView.message
-            val message = "You`re a natural"
-            val typewriterAnim = TypewriterTextAnimator.of(title, message)
-            typewriterAnim.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    startEarnedRewardAnimation(contentView)
-                }
-            })
-            typewriterAnim.start()
-        }
-
-        private fun startEarnedRewardAnimation(contentView: View) {
-
-            val xpAnim = ValueAnimator.ofInt(0, earnedXP)
-            xpAnim.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationStart(animation: Animator?) {
-                    contentView.earnedXP.visible = true
-                }
-            })
-            xpAnim.addUpdateListener {
-                contentView.earnedXP.text = "${it.animatedValue}"
-            }
-
-            val coinsAnim = ValueAnimator.ofInt(0, earnedCoins)
-
-            coinsAnim.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationStart(animation: Animator?) {
-                    contentView.earnedCoins.visible = true
-                }
-            })
-
-            coinsAnim.addUpdateListener {
-                contentView.earnedCoins.text = "${it.animatedValue}"
-            }
-
-            val anim = AnimatorSet()
-            anim.duration = 300
-            anim.playSequentially(xpAnim, coinsAnim)
-
-            anim.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-
-                }
-            })
-
-            anim.start()
-        }
-
-    }
 
     class FirstQuestViewController(args: Bundle? = null) :
         BaseViewController<OnboardAction, OnboardViewState>(
@@ -432,25 +358,14 @@ class OnboardViewController(args: Bundle? = null) :
                 view.calendar.setScheduledEventsAdapter(eventsAdapter)
 
                 view.calendar.postDelayed({
-                    val showcase = TutoShowcase.from(activity!!)
-                    showcase
-                        .setContentView(R.layout.view_onboard_complete_quest)
-                        .on(R.id.calendarQuestContainer)
-                        .addRoundRect()
-                        .withBorder()
-                        .onClick {
-                            showcase.dismiss()
-                            view.checkBox.isChecked = true
-
-
-                            FirstQuestCompletePopup(
-                                AndroidPetAvatar.BEAR.headImage,
-                                Constants.DEFAULT_PLAYER_XP.toInt(),
-                                Constants.DEFAULT_PLAYER_COINS
-                            ).show(view.context)
-                        }
-                        .show()
-                }, 500)
+                    showcaseRect(
+                        layout = R.layout.view_onboard_complete_quest,
+                        view = R.id.calendarQuestContainer,
+                        onClick = {
+                            it.dismiss()
+                            onQuestComplete(view)
+                        })
+                }, 300)
             }
 
             view.firstQuestName.addTextChangedListener(nameWatcher)
@@ -471,24 +386,39 @@ class OnboardViewController(args: Bundle? = null) :
             return view
         }
 
+        private fun onQuestComplete(view: View) {
+            view.checkBox.isChecked = true
+
+            FirstQuestCompletePopup(
+                AndroidPetAvatar.BEAR.headImage,
+                Constants.DEFAULT_PLAYER_XP.toInt(),
+                Constants.DEFAULT_PLAYER_COINS
+            ).show(view.context)
+        }
+
         override fun onAttach(view: View) {
             super.onAttach(view)
-//            activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-            val showcase = TutoShowcase.from(activity!!)
-            showcase
-                .setContentView(R.layout.view_onboard_calendar)
-                .on(R.id.addQuest)
-                .addCircle()
-                .withBorder()
-                .onClick {
-                    showcase.dismiss()
-                    view.addQuest.gone()
-                    view.addQuestContainer.visible()
-                    view.addContainerBackground.visible()
-                    view.firstQuestName.requestFocus()
-                    ViewUtils.showKeyboard(view.context, view.firstQuestName)
-                }
-                .show()
+            showcaseCircle(
+                layout = R.layout.view_onboard_calendar,
+                view = R.id.addQuest,
+                onClick = {
+                    it.dismiss()
+                    onAddQuest(view)
+                })
+        }
+
+        private fun onQuestCompleteAnimationEnd(contentView: View) {
+            showcaseRect(R.layout.view_onboard_bounty, contentView)
+        }
+
+        private fun onAddQuest(view: View) {
+            view.addQuest.gone()
+            view.addQuestContainer.visible()
+            view.addContainerBackground.visible()
+            view.post {
+                view.firstQuestName.requestFocus()
+                ViewUtils.showKeyboard(view.context, view.firstQuestName)
+            }
         }
 
         override fun render(state: OnboardViewState, view: View) {
@@ -575,6 +505,78 @@ class OnboardViewController(args: Bundle? = null) :
             }
 
             override fun rescheduleEvent(position: Int, startTime: Time, duration: Int) {
+            }
+
+        }
+
+
+        inner class FirstQuestCompletePopup(
+            @DrawableRes private val petImage: Int,
+            private val earnedXP: Int,
+            private val earnedCoins: Int
+        ) : Popup(
+            position = Popup.Position.BOTTOM,
+            isAutoHide = false,
+            overlayBackground = null
+        ) {
+
+            override fun createView(inflater: LayoutInflater): View =
+                inflater.inflate(R.layout.popup_quest_complete, null)
+
+            override fun onViewShown(contentView: View) {
+                super.onViewShown(contentView)
+
+                contentView.pet.setImageResource(petImage)
+                startTypingAnimation(contentView)
+            }
+
+            private fun startTypingAnimation(contentView: View) {
+                val title = contentView.message
+                val message = "You`re a natural"
+                val typewriterAnim = TypewriterTextAnimator.of(title, message, typeSpeed = 20)
+                typewriterAnim.addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        startEarnedRewardAnimation(contentView)
+                    }
+                })
+                typewriterAnim.start()
+            }
+
+            private fun startEarnedRewardAnimation(contentView: View) {
+
+                val xpAnim = ValueAnimator.ofInt(0, earnedXP)
+                xpAnim.addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationStart(animation: Animator?) {
+                        contentView.earnedXP.visible = true
+                    }
+                })
+                xpAnim.addUpdateListener {
+                    contentView.earnedXP.text = "${it.animatedValue}"
+                }
+
+                val coinsAnim = ValueAnimator.ofInt(0, earnedCoins)
+
+                coinsAnim.addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationStart(animation: Animator?) {
+                        contentView.earnedCoins.visible = true
+                    }
+                })
+
+                coinsAnim.addUpdateListener {
+                    contentView.earnedCoins.text = "${it.animatedValue}"
+                }
+
+                val anim = AnimatorSet()
+                anim.duration = shortAnimTime
+                anim.playSequentially(xpAnim, coinsAnim)
+
+                anim.addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        onQuestCompleteAnimationEnd(contentView)
+                    }
+                })
+
+                anim.start()
             }
 
         }

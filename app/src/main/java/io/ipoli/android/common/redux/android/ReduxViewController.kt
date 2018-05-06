@@ -3,12 +3,15 @@ package io.ipoli.android.common.redux.android
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.annotation.IdRes
+import android.support.annotation.LayoutRes
 import android.text.method.LinkMovementMethod
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.TextView
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.RestoreViewOnCreateController
+import com.github.florent37.tutoshowcase.TutoShowcase
 import io.ipoli.android.common.*
 import io.ipoli.android.common.di.Module
 import io.ipoli.android.common.mvi.ViewState
@@ -218,6 +221,47 @@ abstract class BaseViewController<A : Action, VS : ViewState> protected construc
 
     }
 
+    protected fun showcaseRect(@LayoutRes layout: Int, @IdRes view: Int, onClick: (TutoShowcase) -> Unit = {}) {
+        val showcase = TutoShowcase.from(activity!!)
+        showcase
+            .setContentView(layout)
+            .on(view)
+            .addRoundRect()
+            .withBorder()
+            .onClick {
+                onClick(showcase)
+            }
+            .show()
+    }
+
+    protected fun showcaseRect(
+        @LayoutRes layout: Int, view: View,
+        onClick: (TutoShowcase) -> Unit = {}
+    ) {
+        val showcase = TutoShowcase.from(activity!!)
+        showcase
+            .setContentView(layout)
+            .on(view)
+            .addRoundRect()
+            .withBorder()
+            .onClick {
+                onClick(showcase)
+            }
+            .show()
+    }
+
+    protected fun showcaseCircle(@LayoutRes layout: Int, @IdRes view: Int, onClick: (TutoShowcase) -> Unit = {}) {
+        val showcase = TutoShowcase.from(activity!!)
+        showcase
+            .setContentView(layout)
+            .on(view)
+            .addCircle()
+            .withBorder()
+            .onClick {
+                onClick(showcase)
+            }
+            .show()
+    }
 
     protected val Color.androidColor: AndroidColor
         get() = AndroidColor.valueOf(this.name)
