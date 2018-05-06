@@ -1,79 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/view_default_toolbar" />
+    <include
+        layout="@layout/view_default_toolbar"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <io.ipoli.android.quest.schedule.calendar.dayview.view.widget.CalendarDayView
-        android:id="@+id/calendar"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        app:visibleHours="8"
-        android:layout_height="match_parent"
-        app:dragImage="@drawable/circle_accent"
-        app:dragImagePadding="8dp"
-        app:dragImageSize="36dp"
-        app:timeLineLayout="@layout/calendar_time_line" />
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_height="match_parent">
 
-    <View
-        android:id="@+id/addContainerBackground"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/md_dark_text_38"
-        android:elevation="3dp"
-        android:visibility="gone" />
-
-    <LinearLayout
-        android:id="@+id/addQuestContainer"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/md_white"
-        android:elevation="3dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <EditText
-            android:id="@+id/questName"
+        <io.ipoli.android.quest.schedule.calendar.dayview.view.widget.CalendarDayView
+            android:id="@+id/calendar"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:dragImage="@drawable/circle_accent"
+            app:dragImagePadding="8dp"
+            app:dragImageSize="36dp"
+            app:timeLineLayout="@layout/calendar_time_line"
+            app:visibleHours="8" />
+
+
+        <View
+            android:id="@+id/addContainerBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/md_dark_text_38"
+            android:elevation="3dp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/addQuestContainer"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/md_white"
+            android:elevation="3dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <EditText
+                android:id="@+id/questName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:backgroundTint="@android:color/transparent"
+                android:hint="Your first Quest name"
+                android:imeOptions="actionDone"
+                android:inputType="textCapSentences"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:textColor="@color/md_black"
+                android:textColorHint="@color/md_dark_text_38" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/saveQuest"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="16dp"
+            android:background="@null"
+            android:elevation="6dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/addQuestContainer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/addQuestContainer" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/addQuest"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:backgroundTint="@android:color/transparent"
-            android:hint="Your first Quest name"
-            android:imeOptions="actionDone"
-            android:inputType="textCapSentences"
-            android:paddingEnd="16dp"
-            android:paddingStart="16dp"
-            android:textColor="@color/md_black"
-            android:textColorHint="@color/md_dark_text_38" />
-    </LinearLayout>
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_add_white_24dp"
+            app:elevation="6dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageButton
-        android:id="@+id/saveQuest"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="16dp"
-        android:background="@null"
-        android:elevation="6dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/addQuestContainer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/addQuestContainer" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addQuest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_add_white_24dp"
-        app:elevation="6dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>

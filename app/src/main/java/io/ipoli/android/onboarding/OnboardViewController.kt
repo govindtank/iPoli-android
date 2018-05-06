@@ -34,6 +34,7 @@ import kotlinx.android.synthetic.main.controller_onboard_first_quest.view.*
 import kotlinx.android.synthetic.main.controller_onboard_avatar.view.*
 import kotlinx.android.synthetic.main.controller_onboard_pet.view.*
 import kotlinx.android.synthetic.main.controller_onboard_story.view.*
+import kotlinx.android.synthetic.main.view_default_toolbar.view.*
 
 sealed class OnboardAction : Action {
     data class SelectAvatar(val index: Int) : OnboardAction()
@@ -325,6 +326,9 @@ class OnboardViewController(args: Bundle? = null) :
             view.saveQuest.gone()
 
             view.questName.addTextChangedListener(nameWatcher)
+
+            setToolbar(view.toolbar)
+            toolbarTitle = "My amazing day"
 
             view.calendar.setHourAdapter(object : CalendarDayView.HourCellAdapter {
                 override fun bind(view: View, hour: Int) {
