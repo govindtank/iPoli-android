@@ -2,20 +2,18 @@ package io.ipoli.android.common.persistence
 
 import android.content.SharedPreferences
 import com.crashlytics.android.Crashlytics
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import io.ipoli.android.quest.Entity
 import io.ipoli.android.tag.Tag
-import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.channels.SendChannel
 import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.runBlocking
 import org.threeten.bp.Instant
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.coroutines.experimental.CoroutineContext
-import kotlin.coroutines.experimental.suspendCoroutine
 import kotlin.reflect.KProperty
 
 /**
@@ -36,41 +34,11 @@ abstract class BaseFirestoreRepository<E, out T>(
         get() =
             FirebaseAuth.getInstance().currentUser!!.uid
 
-    protected fun Query.execute(): QuerySnapshot = runBlocking(UI) {
-        suspendCoroutine<QuerySnapshot> { continuation ->
-            var registration: ListenerRegistration? = null
-
-            registration = addSnapshotListener { querySnapshot, error ->
-
-                registration?.remove()
-
-                if (error != null) {
-                    logError(error)
-                    return@addSnapshotListener
-                }
-
-                continuation.resume(querySnapshot!!)
-            }
-        }
-    }
+    protected fun Query.execute(): QuerySnapshot = Tasks.await(get(Source.CACHE))
 
     protected val Query.documents: List<DocumentSnapshot> get() = execute().documents
 
-    protected fun DocumentReference.getSync(): DocumentSnapshot = runBlocking(UI) {
-        suspendCoroutine<DocumentSnapshot> { continuation ->
-            var registration: ListenerRegistration? = null
-            registration = addSnapshotListener { querySnapshot, error ->
-
-                registration?.remove()
-
-                if (error != null) {
-                    logError(error)
-                    return@addSnapshotListener
-                }
-                continuation.resume(querySnapshot!!)
-            }
-        }
-    }
+    protected fun DocumentReference.getSync(): DocumentSnapshot = Tasks.await(get(Source.CACHE))
 
     protected fun logError(error: FirebaseFirestoreException) {
         Timber.e(error)
