@@ -34,11 +34,23 @@ abstract class BaseFirestoreRepository<E, out T>(
         get() =
             FirebaseAuth.getInstance().currentUser!!.uid
 
-    protected fun Query.execute(): QuerySnapshot = Tasks.await(get(Source.CACHE))
+    protected fun Query.execute(): QuerySnapshot {
+        return try {
+            Tasks.await(get(Source.CACHE))
+        } catch (e: Throwable) {
+            Tasks.await(get())
+        }
+    }
 
     protected val Query.documents: List<DocumentSnapshot> get() = execute().documents
 
-    protected fun DocumentReference.getSync(): DocumentSnapshot = Tasks.await(get(Source.CACHE))
+    protected fun DocumentReference.getSync(): DocumentSnapshot {
+        return try {
+            Tasks.await(get(Source.CACHE))
+        } catch (e: Throwable) {
+            Tasks.await(get())
+        }
+    }
 
     protected fun logError(error: FirebaseFirestoreException) {
         Timber.e(error)
