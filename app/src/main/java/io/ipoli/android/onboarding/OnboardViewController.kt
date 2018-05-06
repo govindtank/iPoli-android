@@ -2,8 +2,11 @@ package io.ipoli.android.onboarding
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
+import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Bundle
+import android.support.annotation.DrawableRes
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.TintableCompoundButton
 import android.text.Editable
@@ -11,7 +14,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.ImageView
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.RouterTransaction
@@ -20,8 +22,8 @@ import com.github.florent37.tutoshowcase.TutoShowcase
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.google_material_typeface_library.GoogleMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import io.ipoli.android.Constants
 import io.ipoli.android.R
-import io.ipoli.android.R.id.questCategoryIndicator
 import io.ipoli.android.common.AppState
 import io.ipoli.android.common.BaseViewStateReducer
 import io.ipoli.android.common.ViewUtils
@@ -33,21 +35,22 @@ import io.ipoli.android.common.redux.android.ReduxViewController
 import io.ipoli.android.common.view.*
 import io.ipoli.android.common.view.anim.TypewriterTextAnimator
 import io.ipoli.android.onboarding.OnboardViewState.StateType.*
+import io.ipoli.android.pet.AndroidPetAvatar
 import io.ipoli.android.player.data.AndroidAvatar
 import io.ipoli.android.player.data.Avatar
-import io.ipoli.android.quest.schedule.calendar.dayview.view.DayViewAction
 import io.ipoli.android.quest.schedule.calendar.dayview.view.widget.CalendarDayView
 import io.ipoli.android.quest.schedule.calendar.dayview.view.widget.CalendarEvent
 import io.ipoli.android.quest.schedule.calendar.dayview.view.widget.ScheduledEventsAdapter
 import kotlinx.android.synthetic.main.calendar_hour_cell.view.*
 import kotlinx.android.synthetic.main.controller_onboard.view.*
-import kotlinx.android.synthetic.main.controller_onboard_first_quest.view.*
 import kotlinx.android.synthetic.main.controller_onboard_avatar.view.*
+import kotlinx.android.synthetic.main.controller_onboard_first_quest.view.*
 import kotlinx.android.synthetic.main.controller_onboard_pet.view.*
 import kotlinx.android.synthetic.main.controller_onboard_story.view.*
 import kotlinx.android.synthetic.main.item_calendar_quest.view.*
-import kotlinx.android.synthetic.main.popup_rate.view.*
+import kotlinx.android.synthetic.main.popup_quest_complete.view.*
 import kotlinx.android.synthetic.main.view_default_toolbar.view.*
+import java.util.*
 
 sealed class OnboardAction : Action {
     data class SelectAvatar(val index: Int) : OnboardAction()
@@ -149,7 +152,7 @@ class OnboardViewController(args: Bundle? = null) :
         adapterPosition: Int,
         animate: Boolean = true
     ) {
-        val childRouter = getChildRouter(view.pager)
+        val childRouter = getChildRouter(view.onboardPager)
 
         val changeHandler = if (animate) HorizontalChangeHandler() else null
 
@@ -296,6 +299,79 @@ class OnboardViewController(args: Bundle? = null) :
 
     }
 
+    class FirstQuestCompletePopup(
+        @DrawableRes private val petImage: Int,
+        private val earnedXP: Int,
+        private val earnedCoins: Int
+    ) : Popup(
+        position = Popup.Position.BOTTOM,
+        isAutoHide = false,
+        overlayBackground = null
+    ) {
+        override fun createView(inflater: LayoutInflater): View {
+            val view = inflater.inflate(R.layout.popup_quest_complete, null)
+
+            return view
+        }
+
+        override fun onViewShown(contentView: View) {
+            super.onViewShown(contentView)
+
+            contentView.pet.setImageResource(petImage)
+            startTypingAnimation(contentView)
+        }
+
+        private fun startTypingAnimation(contentView: View) {
+            val title = contentView.message
+            val message = "You`re a natural"
+            val typewriterAnim = TypewriterTextAnimator.of(title, message)
+            typewriterAnim.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    startEarnedRewardAnimation(contentView)
+                }
+            })
+            typewriterAnim.start()
+        }
+
+        private fun startEarnedRewardAnimation(contentView: View) {
+
+            val xpAnim = ValueAnimator.ofInt(0, earnedXP)
+            xpAnim.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator?) {
+                    contentView.earnedXP.visible = true
+                }
+            })
+            xpAnim.addUpdateListener {
+                contentView.earnedXP.text = "${it.animatedValue}"
+            }
+
+            val coinsAnim = ValueAnimator.ofInt(0, earnedCoins)
+
+            coinsAnim.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator?) {
+                    contentView.earnedCoins.visible = true
+                }
+            })
+
+            coinsAnim.addUpdateListener {
+                contentView.earnedCoins.text = "${it.animatedValue}"
+            }
+
+            val anim = AnimatorSet()
+            anim.duration = 300
+            anim.playSequentially(xpAnim, coinsAnim)
+
+            anim.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+
+                }
+            })
+
+            anim.start()
+        }
+
+    }
+
     class FirstQuestViewController(args: Bundle? = null) :
         BaseViewController<OnboardAction, OnboardViewState>(
             args
@@ -365,6 +441,13 @@ class OnboardViewController(args: Bundle? = null) :
                         .onClick {
                             showcase.dismiss()
                             view.checkBox.isChecked = true
+
+
+                            FirstQuestCompletePopup(
+                                AndroidPetAvatar.BEAR.headImage,
+                                Constants.DEFAULT_PLAYER_XP.toInt(),
+                                Constants.DEFAULT_PLAYER_COINS
+                            ).show(view.context)
                         }
                         .show()
                 }, 500)
@@ -390,7 +473,7 @@ class OnboardViewController(args: Bundle? = null) :
 
         override fun onAttach(view: View) {
             super.onAttach(view)
-            activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+//            activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
             val showcase = TutoShowcase.from(activity!!)
             showcase
                 .setContentView(R.layout.view_onboard_calendar)
@@ -455,7 +538,7 @@ class OnboardViewController(args: Bundle? = null) :
                 view.questCategoryIndicator.setBackgroundResource(R.color.md_green_900)
 
                 (view.checkBox as TintableCompoundButton).supportButtonTintList =
-                        ContextCompat.getColorStateList(context, R.color.md_green_200)
+                    ContextCompat.getColorStateList(context, R.color.md_green_200)
                 view.completedBackgroundView.invisible()
                 view.repeatIndicator.gone()
                 view.challengeIndicator.gone()
@@ -463,7 +546,7 @@ class OnboardViewController(args: Bundle? = null) :
                 view.checkBox.setOnCheckedChangeListener { cb, checked ->
                     if (checked) {
                         (view.checkBox as TintableCompoundButton).supportButtonTintList =
-                                ContextCompat.getColorStateList(context, R.color.md_grey_700)
+                            ContextCompat.getColorStateList(context, R.color.md_grey_700)
                         val anim = RevealAnimator().create(view.completedBackgroundView, cb)
                         anim.addListener(object : AnimatorListenerAdapter() {
                             override fun onAnimationStart(animation: Animator?) {
