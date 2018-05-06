@@ -4,28 +4,35 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ImageView
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
+import com.github.florent37.tutoshowcase.TutoShowcase
+import com.mikepenz.google_material_typeface_library.GoogleMaterial
+import com.mikepenz.iconics.IconicsDrawable
 import io.ipoli.android.R
 import io.ipoli.android.common.AppState
 import io.ipoli.android.common.BaseViewStateReducer
+import io.ipoli.android.common.ViewUtils
 import io.ipoli.android.common.mvi.ViewState
 import io.ipoli.android.common.redux.Action
 import io.ipoli.android.common.redux.android.BaseViewController
 import io.ipoli.android.common.redux.android.ReduxViewController
+import io.ipoli.android.common.view.*
 import io.ipoli.android.common.view.anim.TypewriterTextAnimator
-import io.ipoli.android.common.view.children
-import io.ipoli.android.common.view.enterFullScreen
-import io.ipoli.android.common.view.inflate
 import io.ipoli.android.onboarding.OnboardViewState.StateType.*
 import io.ipoli.android.player.data.AndroidAvatar
 import io.ipoli.android.player.data.Avatar
-import kotlinx.android.synthetic.main.controller_add_repeating_quest.view.*
+import io.ipoli.android.quest.schedule.calendar.dayview.view.widget.CalendarDayView
+import kotlinx.android.synthetic.main.calendar_hour_cell.view.*
+import kotlinx.android.synthetic.main.controller_onboard.view.*
+import kotlinx.android.synthetic.main.controller_onboard_first_quest.view.*
 import kotlinx.android.synthetic.main.controller_onboard_avatar.view.*
 import kotlinx.android.synthetic.main.controller_onboard_pet.view.*
 import kotlinx.android.synthetic.main.controller_onboard_story.view.*
+import timber.log.Timber
 
 sealed class OnboardAction : Action {
     data class SelectAvatar(val index: Int) : OnboardAction()
@@ -103,7 +110,7 @@ class OnboardViewController(args: Bundle? = null) :
         container: ViewGroup,
         savedViewState: Bundle?
     ): View {
-        enterFullScreen()
+//        enterFullScreen()
         val view = container.inflate(R.layout.controller_onboard)
         return view
     }
@@ -114,7 +121,8 @@ class OnboardViewController(args: Bundle? = null) :
             INITIAL -> {
                 changeChildController(
                     view = view,
-                    adapterPosition = state.adapterPosition,
+//                    adapterPosition = state.adapterPosition,
+                    adapterPosition = 3,
                     animate = false
                 )
             }
@@ -143,6 +151,7 @@ class OnboardViewController(args: Bundle? = null) :
             STORY_INDEX -> StoryViewController()
             AVATAR_INDEX -> AvatarViewController()
             PET_INDEX -> PetViewController()
+            ADD_QUEST_INDEX -> FirstQuestViewController()
             else -> throw IllegalArgumentException("Unknown controller position $position")
         }
 
@@ -270,6 +279,66 @@ class OnboardViewController(args: Bundle? = null) :
 
         }
 
+    }
+
+    class FirstQuestViewController(args: Bundle? = null) :
+        BaseViewController<OnboardAction, OnboardViewState>(
+            args
+        ) {
+
+        override val stateKey = OnboardReducer.stateKey
+
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup,
+            savedViewState: Bundle?
+        ): View {
+            val view = container.inflate(R.layout.controller_onboard_first_quest)
+            view.saveQuest.setImageDrawable(
+                IconicsDrawable(activity!!).normalIcon(
+                    GoogleMaterial.Icon.gmd_send,
+                    R.color.md_dark_text_54
+                ).respectFontBounds(true)
+            )
+
+            view.calendar.setHourAdapter(object : CalendarDayView.HourCellAdapter {
+                override fun bind(view: View, hour: Int) {
+                    if (hour > 0) {
+                        view.timeLabel.text = hour.toString() + ":00"
+                    }
+                }
+            })
+            view.calendar.scrollToNow()
+
+
+            return view
+        }
+
+        override fun onAttach(view: View) {
+            super.onAttach(view)
+            activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+            val showcase = TutoShowcase.from(activity!!)
+            showcase
+//                .setFitsSystemWindows(true)
+                .setContentView(R.layout.view_onboard_calendar)
+                .on(R.id.addQuest)
+                .addCircle()
+                .withBorder()
+                .onClick {
+                    showcase.dismiss()
+                    view.addQuest.gone()
+                    view.addQuestContainer.visible()
+                    view.saveQuest.visible()
+                    view.addContainerBackground.visible()
+                    view.questName.requestFocus()
+                    ViewUtils.showKeyboard(view.context, view.questName)
+                }
+                .show()
+        }
+
+        override fun render(state: OnboardViewState, view: View) {
+
+        }
     }
 
     companion object {

@@ -110,6 +110,7 @@ dependencies {
     implementation 'com.evernote:android-job:1.2.5'
     implementation 'org.solovyev.android:checkout:1.2.1'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    implementation 'com.github.florent37:tutoshowcase:1.0.1'
     implementation 'org.apmem.tools:layouts:1.10@aar'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
