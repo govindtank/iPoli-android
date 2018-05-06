@@ -849,36 +849,36 @@ class DayViewController :
             (R.layout.item_unscheduled_quest, items.toMutableList(), calendarDayView) {
 
         override fun ViewHolder.bind(
-            vm: UnscheduledQuestViewModel,
+            viewModel: UnscheduledQuestViewModel,
             calendarDayView: CalendarDayView
         ) {
             itemView.setOnLongClickListener {
-                if (vm.isStarted) {
+                if (viewModel.isStarted) {
                     showShortToast(R.string.validation_timer_running)
                 } else {
-                    dispatch(DayViewAction.StartEditUnscheduledQuest(vm))
+                    dispatch(DayViewAction.StartEditUnscheduledQuest(viewModel))
                     calendarDayView.startEventRescheduling(events[adapterPosition])
                 }
                 true
             }
 
             (itemView.unscheduledCheckBox as TintableCompoundButton).supportButtonTintList =
-                    tintList(vm.backgroundColor.color500, itemView.context)
+                    tintList(viewModel.backgroundColor.color500, itemView.context)
 
-            if (vm.tags.isNotEmpty()) {
+            if (viewModel.tags.isNotEmpty()) {
                 itemView.questTagName.visible()
-                renderTag(itemView.questTagName, vm.tags.first())
+                renderTag(itemView.questTagName, viewModel.tags.first())
             } else {
                 itemView.questTagName.gone()
             }
 
-            if (vm.isCompleted) {
-                val span = SpannableString(vm.name)
-                span.setSpan(StrikethroughSpan(), 0, vm.name.length, 0)
+            if (viewModel.isCompleted) {
+                val span = SpannableString(viewModel.name)
+                span.setSpan(StrikethroughSpan(), 0, viewModel.name.length, 0)
                 itemView.unscheduledQuestName.text = span
                 itemView.unscheduledCheckBox.isChecked = true
 
-                vm.icon?.let {
+                viewModel.icon?.let {
                     val icon = IconicsDrawable(itemView.context)
                         .icon(it.icon)
                         .colorRes(R.color.md_dark_text_38)
@@ -888,19 +888,19 @@ class DayViewController :
                 }
 
                 itemView.setOnClickListener {
-                    showCompletedQuest(vm.id)
+                    showCompletedQuest(viewModel.id)
                 }
 
             } else {
-                itemView.unscheduledQuestName.text = vm.name
+                itemView.unscheduledQuestName.text = viewModel.name
                 itemView.unscheduledQuestName.setTextColor(
                     ContextCompat.getColor(
                         itemView.context,
-                        vm.textColor
+                        viewModel.textColor
                     )
                 )
 
-                vm.icon?.let {
+                viewModel.icon?.let {
                     val icon = IconicsDrawable(itemView.context)
                         .icon(it.icon)
                         .colorRes(it.color)
@@ -909,30 +909,30 @@ class DayViewController :
                     itemView.unscheduledQuestIcon.setImageDrawable(icon)
                 }
 
-                if (vm.isPlaceholder) {
+                if (viewModel.isPlaceholder) {
                     itemView.setOnClickListener(null)
                     itemView.unscheduledCheckBox.visible = false
                 } else {
 
                     itemView.unscheduledCheckBox.visible = true
                     itemView.setOnClickListener {
-                        showQuest(vm.id)
+                        showQuest(viewModel.id)
                     }
                 }
 
             }
 
             itemView.unscheduledQuestRepeatIndicator.visibility =
-                    if (vm.isRepeating) View.VISIBLE else View.GONE
+                    if (viewModel.isRepeating) View.VISIBLE else View.GONE
 
             itemView.unscheduledQuestChallengeIndicator.visibility =
-                    if (vm.isFromChallenge) View.VISIBLE else View.GONE
+                    if (viewModel.isFromChallenge) View.VISIBLE else View.GONE
 
             itemView.unscheduledCheckBox.setOnCheckedChangeListener { _, checked ->
                 if (checked) {
-                    dispatch(DayViewAction.CompleteQuest(vm.id, vm.isStarted))
+                    dispatch(DayViewAction.CompleteQuest(viewModel.id, viewModel.isStarted))
                 } else {
-                    dispatch(DayViewAction.UndoCompleteQuest(vm.id))
+                    dispatch(DayViewAction.UndoCompleteQuest(viewModel.id))
                 }
 
             }

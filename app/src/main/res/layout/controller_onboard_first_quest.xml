@@ -10,8 +10,8 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
 
         <io.ipoli.android.quest.schedule.calendar.dayview.view.widget.CalendarDayView
             android:id="@+id/calendar"
@@ -32,7 +32,7 @@
             android:elevation="3dp"
             android:visibility="gone" />
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/addQuestContainer"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -44,10 +44,11 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <EditText
-                android:id="@+id/questName"
+                android:id="@+id/firstQuestName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
                 android:backgroundTint="@android:color/transparent"
                 android:hint="Your first Quest name"
                 android:imeOptions="actionDone"
@@ -56,19 +57,18 @@
                 android:paddingStart="16dp"
                 android:textColor="@color/md_black"
                 android:textColorHint="@color/md_dark_text_38" />
-        </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/saveQuest"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="16dp"
-            android:background="@null"
-            android:elevation="6dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/addQuestContainer"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/addQuestContainer" />
+            <ImageButton
+                android:id="@+id/saveQuest"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="4dp"
+                android:visibility="gone" />
+        </RelativeLayout>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/addQuest"

@@ -1,6 +1,11 @@
 package io.ipoli.android.onboarding
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.content.Context
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v4.widget.TintableCompoundButton
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -12,12 +17,15 @@ import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.github.florent37.tutoshowcase.TutoShowcase
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.google_material_typeface_library.GoogleMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import io.ipoli.android.R
+import io.ipoli.android.R.id.questCategoryIndicator
 import io.ipoli.android.common.AppState
 import io.ipoli.android.common.BaseViewStateReducer
 import io.ipoli.android.common.ViewUtils
+import io.ipoli.android.common.datetime.Time
 import io.ipoli.android.common.mvi.ViewState
 import io.ipoli.android.common.redux.Action
 import io.ipoli.android.common.redux.android.BaseViewController
@@ -27,13 +35,18 @@ import io.ipoli.android.common.view.anim.TypewriterTextAnimator
 import io.ipoli.android.onboarding.OnboardViewState.StateType.*
 import io.ipoli.android.player.data.AndroidAvatar
 import io.ipoli.android.player.data.Avatar
+import io.ipoli.android.quest.schedule.calendar.dayview.view.DayViewAction
 import io.ipoli.android.quest.schedule.calendar.dayview.view.widget.CalendarDayView
+import io.ipoli.android.quest.schedule.calendar.dayview.view.widget.CalendarEvent
+import io.ipoli.android.quest.schedule.calendar.dayview.view.widget.ScheduledEventsAdapter
 import kotlinx.android.synthetic.main.calendar_hour_cell.view.*
 import kotlinx.android.synthetic.main.controller_onboard.view.*
 import kotlinx.android.synthetic.main.controller_onboard_first_quest.view.*
 import kotlinx.android.synthetic.main.controller_onboard_avatar.view.*
 import kotlinx.android.synthetic.main.controller_onboard_pet.view.*
 import kotlinx.android.synthetic.main.controller_onboard_story.view.*
+import kotlinx.android.synthetic.main.item_calendar_quest.view.*
+import kotlinx.android.synthetic.main.popup_rate.view.*
 import kotlinx.android.synthetic.main.view_default_toolbar.view.*
 
 sealed class OnboardAction : Action {
@@ -292,7 +305,7 @@ class OnboardViewController(args: Bundle? = null) :
 
         private val nameWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                if(s.length > 2) {
+                if (s.length > 2) {
                     view!!.saveQuest.visible()
                 } else {
                     view!!.saveQuest.gone()
@@ -323,9 +336,41 @@ class OnboardViewController(args: Bundle? = null) :
                     .sizeDp(24)
                     .respectFontBounds(true)
             )
-            view.saveQuest.gone()
+            view.saveQuest.onDebounceClick {
+                view.addQuestContainer.gone()
+                view.addContainerBackground.gone()
+                ViewUtils.hideKeyboard(view)
 
-            view.questName.addTextChangedListener(nameWatcher)
+                val eventsAdapter =
+                    OnboardQuestAdapter(
+                        activity!!,
+                        mutableListOf(
+                            OnboardQuestViewModel(
+                                "",
+                                view.firstQuestName.text.toString(),
+                                60,
+                                Time.now().toMinuteOfDay()
+                            )
+                        )
+                    )
+                view.calendar.setScheduledEventsAdapter(eventsAdapter)
+
+                view.calendar.postDelayed({
+                    val showcase = TutoShowcase.from(activity!!)
+                    showcase
+                        .setContentView(R.layout.view_onboard_complete_quest)
+                        .on(R.id.calendarQuestContainer)
+                        .addRoundRect()
+                        .withBorder()
+                        .onClick {
+                            showcase.dismiss()
+                            view.checkBox.isChecked = true
+                        }
+                        .show()
+                }, 500)
+            }
+
+            view.firstQuestName.addTextChangedListener(nameWatcher)
 
             setToolbar(view.toolbar)
             toolbarTitle = "My amazing day"
@@ -348,7 +393,6 @@ class OnboardViewController(args: Bundle? = null) :
             activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
             val showcase = TutoShowcase.from(activity!!)
             showcase
-//                .setFitsSystemWindows(true)
                 .setContentView(R.layout.view_onboard_calendar)
                 .on(R.id.addQuest)
                 .addCircle()
@@ -358,13 +402,97 @@ class OnboardViewController(args: Bundle? = null) :
                     view.addQuest.gone()
                     view.addQuestContainer.visible()
                     view.addContainerBackground.visible()
-                    view.questName.requestFocus()
-                    ViewUtils.showKeyboard(view.context, view.questName)
+                    view.firstQuestName.requestFocus()
+                    ViewUtils.showKeyboard(view.context, view.firstQuestName)
                 }
                 .show()
         }
 
         override fun render(state: OnboardViewState, view: View) {
+
+        }
+
+        data class OnboardQuestViewModel(
+            override val id: String,
+            val name: String,
+            override val duration: Int,
+            override val startMinute: Int
+        ) : CalendarEvent {
+
+            val startTime: String get() = Time.of(startMinute).toString()
+
+            val endTime: String get() = Time.of(startMinute).plus(duration).toString()
+        }
+
+        inner class OnboardQuestAdapter(
+            context: Context,
+            events: MutableList<OnboardQuestViewModel>
+        ) :
+            ScheduledEventsAdapter<OnboardQuestViewModel>(
+                context,
+                R.layout.item_calendar_quest,
+                events
+            ) {
+            override fun bindView(view: View, position: Int) {
+                val vm = getItem(position)
+                view.checkBox.visible()
+                view.backgroundView.setBackgroundColor(colorRes(R.color.md_green_500))
+
+                view.questName.text = vm.name
+                view.questName.setTextColor(colorRes(R.color.md_white))
+
+                view.questSchedule.text = "${vm.startTime} - ${vm.endTime}"
+                view.questSchedule.setTextColor(colorRes(R.color.md_light_text_70))
+
+                view.questIcon.visible = true
+                view.questIcon.setImageDrawable(
+                    IconicsDrawable(context).normalIcon(
+                        CommunityMaterial.Icon.cmd_duck,
+                        R.color.md_green_200
+                    )
+                )
+
+                view.questCategoryIndicator.setBackgroundResource(R.color.md_green_900)
+
+                (view.checkBox as TintableCompoundButton).supportButtonTintList =
+                        ContextCompat.getColorStateList(context, R.color.md_green_200)
+                view.completedBackgroundView.invisible()
+                view.repeatIndicator.gone()
+                view.challengeIndicator.gone()
+
+                view.checkBox.setOnCheckedChangeListener { cb, checked ->
+                    if (checked) {
+                        (view.checkBox as TintableCompoundButton).supportButtonTintList =
+                                ContextCompat.getColorStateList(context, R.color.md_grey_700)
+                        val anim = RevealAnimator().create(view.completedBackgroundView, cb)
+                        anim.addListener(object : AnimatorListenerAdapter() {
+                            override fun onAnimationStart(animation: Animator?) {
+                                view.questCategoryIndicator.setBackgroundResource(R.color.md_grey_400)
+                                view.completedBackgroundView.visibility = View.VISIBLE
+
+                                view.questIcon.setImageDrawable(
+                                    IconicsDrawable(context).normalIcon(
+                                        CommunityMaterial.Icon.cmd_duck,
+                                        R.color.md_dark_text_38
+                                    )
+                                )
+                            }
+
+                            override fun onAnimationEnd(animation: Animator?) {
+
+                            }
+
+                        })
+                        anim.start()
+                    }
+                }
+            }
+
+            override fun adaptViewForHeight(adapterView: View, height: Float) {
+            }
+
+            override fun rescheduleEvent(position: Int, startTime: Time, duration: Int) {
+            }
 
         }
     }
