@@ -407,8 +407,18 @@ class OnboardViewController(args: Bundle? = null) :
                 })
         }
 
-        private fun onQuestCompleteAnimationEnd(contentView: View) {
-            showcaseRect(R.layout.view_onboard_bounty, contentView)
+        private fun onQuestCompleteAnimationEnd(popup: Popup, contentView: View) {
+            val showcase = showcaseRect(
+                layout = R.layout.view_onboard_bounty,
+                view = contentView
+            )
+            contentView.setOnClickListener {
+                showcase.dismiss()
+                popup.hide()
+                view!!.postDelayed({
+                    dispatch(OnboardAction.ShowNext)
+                }, 300)
+            }
         }
 
         private fun onAddQuest(view: View) {
@@ -516,7 +526,7 @@ class OnboardViewController(args: Bundle? = null) :
             private val earnedCoins: Int
         ) : Popup(
             position = Popup.Position.BOTTOM,
-            isAutoHide = false,
+            isAutoHide = true,
             overlayBackground = null
         ) {
 
@@ -572,7 +582,7 @@ class OnboardViewController(args: Bundle? = null) :
 
                 anim.addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
-                        onQuestCompleteAnimationEnd(contentView)
+                        onQuestCompleteAnimationEnd(this@FirstQuestCompletePopup, contentView)
                     }
                 })
 

@@ -221,7 +221,7 @@ abstract class BaseViewController<A : Action, VS : ViewState> protected construc
 
     }
 
-    protected fun showcaseRect(@LayoutRes layout: Int, @IdRes view: Int, onClick: (TutoShowcase) -> Unit = {}) {
+    protected fun showcaseRect(@LayoutRes layout: Int, @IdRes view: Int, onClick: (TutoShowcase) -> Unit = {}): TutoShowcase {
         val showcase = TutoShowcase.from(activity!!)
         showcase
             .setContentView(layout)
@@ -232,12 +232,13 @@ abstract class BaseViewController<A : Action, VS : ViewState> protected construc
                 onClick(showcase)
             }
             .show()
+        return showcase
     }
 
     protected fun showcaseRect(
         @LayoutRes layout: Int, view: View,
         onClick: (TutoShowcase) -> Unit = {}
-    ) {
+    ): TutoShowcase {
         val showcase = TutoShowcase.from(activity!!)
         showcase
             .setContentView(layout)
@@ -248,9 +249,10 @@ abstract class BaseViewController<A : Action, VS : ViewState> protected construc
                 onClick(showcase)
             }
             .show()
+        return showcase
     }
 
-    protected fun showcaseCircle(@LayoutRes layout: Int, @IdRes view: Int, onClick: (TutoShowcase) -> Unit = {}) {
+    protected fun showcaseCircle(@LayoutRes layout: Int, @IdRes view: Int, onClick: (TutoShowcase) -> Unit = {}): TutoShowcase {
         val showcase = TutoShowcase.from(activity!!)
         showcase
             .setContentView(layout)
@@ -261,6 +263,7 @@ abstract class BaseViewController<A : Action, VS : ViewState> protected construc
                 onClick(showcase)
             }
             .show()
+        return showcase
     }
 
     protected val Color.androidColor: AndroidColor
