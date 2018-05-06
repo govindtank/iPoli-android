@@ -627,7 +627,7 @@ class OnboardViewController(args: Bundle? = null) :
                     name = stringRes(R.string.predefined_rq_floss),
                     repeatingQuest = RepeatingQuest(
                         name = stringRes(R.string.predefined_rq_floss),
-                        icon = Icon.TOOLS,
+                        icon = Icon.FLOWER,
                         color = Color.GREEN,
                         duration = 15,
                         repeatPattern = RepeatPattern.Daily()
@@ -641,6 +641,136 @@ class OnboardViewController(args: Bundle? = null) :
                         color = Color.BLUE,
                         duration = 15,
                         repeatPattern = RepeatPattern.Daily()
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_walk_the_dog),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_walk_the_dog),
+                        icon = Icon.PAW,
+                        color = Color.ORANGE,
+                        duration = 60,
+                        repeatPattern = RepeatPattern.Daily()
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_play_with_cat),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_play_with_cat),
+                        icon = Icon.PAW,
+                        color = Color.ORANGE,
+                        duration = 30,
+                        repeatPattern = RepeatPattern.Daily()
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_meditate),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_meditate),
+                        icon = Icon.TREE,
+                        color = Color.GREEN,
+                        duration = 20,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(3)
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_read),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_read),
+                        icon = Icon.BOOK,
+                        color = Color.BLUE,
+                        duration = 30,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(5)
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_call_parent),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_call_parent),
+                        icon = Icon.PHONE,
+                        color = Color.DEEP_ORANGE,
+                        duration = 30,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(2)
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_email),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_email),
+                        icon = Icon.MAIL,
+                        color = Color.RED,
+                        duration = 30,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(5)
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_stretch),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_stretch),
+                        icon = Icon.RUN,
+                        color = Color.GREEN,
+                        duration = 30,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(2)
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_bike),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_bike),
+                        icon = Icon.BIKE,
+                        color = Color.GREEN,
+                        duration = 60,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(3)
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_family_dinner),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_family_dinner),
+                        icon = Icon.RESTAURANT,
+                        color = Color.PURPLE,
+                        duration = 60,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(3)
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_call_friend),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_call_friend),
+                        icon = Icon.PHONE,
+                        color = Color.ORANGE,
+                        duration = 30,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(2)
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_take_walk),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_take_walk),
+                        icon = Icon.TREE,
+                        color = Color.GREEN,
+                        duration = 60,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(3)
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_learn_new_language),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_learn_new_language),
+                        icon = Icon.ACADEMIC,
+                        color = Color.BLUE,
+                        duration = 30,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(5)
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_date_night),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_date_night),
+                        icon = Icon.HEART,
+                        color = Color.PINK,
+                        duration = 90,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(1)
                     )
                 )
             )
@@ -672,7 +802,7 @@ class OnboardViewController(args: Bundle? = null) :
                 holder: SimpleViewHolder
             ) {
                 view.rqName.text = vm.name
-                view.rqRepeatPattern.text = "7 x week"
+                view.rqRepeatPattern.text = "${vm.repeatingQuest.repeatPattern.periodCount} x week"
 
                 view.rqIcon.backgroundTintList =
                     ColorStateList.valueOf(colorRes(vm.repeatingQuest.color.androidColor.color500))
