@@ -5,10 +5,12 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.content.Context
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.support.annotation.DrawableRes
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.TintableCompoundButton
+import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -33,20 +35,29 @@ import io.ipoli.android.common.redux.android.BaseViewController
 import io.ipoli.android.common.redux.android.ReduxViewController
 import io.ipoli.android.common.view.*
 import io.ipoli.android.common.view.anim.TypewriterTextAnimator
+import io.ipoli.android.common.view.recyclerview.BaseRecyclerViewAdapter
+import io.ipoli.android.common.view.recyclerview.RecyclerViewViewModel
+import io.ipoli.android.common.view.recyclerview.SimpleViewHolder
 import io.ipoli.android.onboarding.OnboardViewState.StateType.*
 import io.ipoli.android.pet.AndroidPetAvatar
 import io.ipoli.android.player.data.AndroidAvatar
 import io.ipoli.android.player.data.Avatar
+import io.ipoli.android.quest.Color
+import io.ipoli.android.quest.Icon
+import io.ipoli.android.quest.RepeatingQuest
 import io.ipoli.android.quest.schedule.calendar.dayview.view.widget.CalendarDayView
 import io.ipoli.android.quest.schedule.calendar.dayview.view.widget.CalendarEvent
 import io.ipoli.android.quest.schedule.calendar.dayview.view.widget.ScheduledEventsAdapter
+import io.ipoli.android.repeatingquest.entity.RepeatPattern
 import kotlinx.android.synthetic.main.calendar_hour_cell.view.*
 import kotlinx.android.synthetic.main.controller_onboard.view.*
 import kotlinx.android.synthetic.main.controller_onboard_avatar.view.*
 import kotlinx.android.synthetic.main.controller_onboard_first_quest.view.*
 import kotlinx.android.synthetic.main.controller_onboard_pet.view.*
+import kotlinx.android.synthetic.main.controller_onboard_pick_repeating_quests.view.*
 import kotlinx.android.synthetic.main.controller_onboard_story.view.*
 import kotlinx.android.synthetic.main.item_calendar_quest.view.*
+import kotlinx.android.synthetic.main.item_onboard_repeating_quest.view.*
 import kotlinx.android.synthetic.main.popup_quest_complete.view.*
 import kotlinx.android.synthetic.main.view_default_toolbar.view.*
 
@@ -168,6 +179,7 @@ class OnboardViewController(args: Bundle? = null) :
             AVATAR_INDEX -> AvatarViewController()
             PET_INDEX -> PetViewController()
             ADD_QUEST_INDEX -> FirstQuestViewController()
+            PICK_REPEATING_QUESTS_INDEX -> PickRepeatingQuestsViewController()
             else -> throw IllegalArgumentException("Unknown controller position $position")
         }
 
@@ -380,6 +392,7 @@ class OnboardViewController(args: Bundle? = null) :
                     }
                 }
             })
+            view.calendar.hideTimeline()
             view.calendar.scrollToNow()
 
 
@@ -587,6 +600,219 @@ class OnboardViewController(args: Bundle? = null) :
                 })
 
                 anim.start()
+            }
+
+        }
+    }
+
+    class PickRepeatingQuestsViewController(args: Bundle? = null) :
+        BaseViewController<OnboardAction, OnboardViewState>(
+            args
+        ) {
+
+        override val stateKey = OnboardReducer.stateKey
+
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup,
+            savedViewState: Bundle?
+        ): View {
+            val view = container.inflate(R.layout.controller_onboard_pick_repeating_quests)
+
+            setToolbar(view.toolbar)
+            toolbarTitle = "Choose starting Quests"
+
+            val rqs = listOf(
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_floss),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_floss),
+                        icon = Icon.FLOWER,
+                        color = Color.GREEN,
+                        duration = 15,
+                        repeatPattern = RepeatPattern.Daily()
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_drink_water),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_drink_water),
+                        icon = Icon.DROP,
+                        color = Color.BLUE,
+                        duration = 15,
+                        repeatPattern = RepeatPattern.Daily()
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_walk_the_dog),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_walk_the_dog),
+                        icon = Icon.PAW,
+                        color = Color.ORANGE,
+                        duration = 60,
+                        repeatPattern = RepeatPattern.Daily()
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_play_with_cat),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_play_with_cat),
+                        icon = Icon.PAW,
+                        color = Color.ORANGE,
+                        duration = 30,
+                        repeatPattern = RepeatPattern.Daily()
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_meditate),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_meditate),
+                        icon = Icon.TREE,
+                        color = Color.GREEN,
+                        duration = 20,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(3)
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_read),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_read),
+                        icon = Icon.BOOK,
+                        color = Color.BLUE,
+                        duration = 30,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(5)
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_call_parent),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_call_parent),
+                        icon = Icon.PHONE,
+                        color = Color.DEEP_ORANGE,
+                        duration = 30,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(2)
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_email),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_email),
+                        icon = Icon.MAIL,
+                        color = Color.RED,
+                        duration = 30,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(5)
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_stretch),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_stretch),
+                        icon = Icon.RUN,
+                        color = Color.GREEN,
+                        duration = 30,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(2)
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_bike),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_bike),
+                        icon = Icon.BIKE,
+                        color = Color.GREEN,
+                        duration = 60,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(3)
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_family_dinner),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_family_dinner),
+                        icon = Icon.RESTAURANT,
+                        color = Color.PURPLE,
+                        duration = 60,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(3)
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_call_friend),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_call_friend),
+                        icon = Icon.PHONE,
+                        color = Color.ORANGE,
+                        duration = 30,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(2)
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_take_walk),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_take_walk),
+                        icon = Icon.TREE,
+                        color = Color.GREEN,
+                        duration = 60,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(3)
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_learn_new_language),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_learn_new_language),
+                        icon = Icon.ACADEMIC,
+                        color = Color.BLUE,
+                        duration = 30,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(5)
+                    )
+                ),
+                RepeatingQuestViewModel(
+                    name = stringRes(R.string.predefined_rq_date_night),
+                    repeatingQuest = RepeatingQuest(
+                        name = stringRes(R.string.predefined_rq_date_night),
+                        icon = Icon.HEART,
+                        color = Color.PINK,
+                        duration = 90,
+                        repeatPattern = RepeatPattern.Flexible.Weekly(1)
+                    )
+                )
+            )
+
+            view.onboardRepeatingQuests.layoutManager =
+                LinearLayoutManager(container.context, LinearLayoutManager.VERTICAL, false)
+            val adapter = RepeatingQuestsAdapter()
+            view.onboardRepeatingQuests.adapter = adapter
+            adapter.updateAll(rqs)
+
+            return view
+        }
+
+        override fun render(state: OnboardViewState, view: View) {
+        }
+
+        data class RepeatingQuestViewModel(val name: String, val repeatingQuest: RepeatingQuest) :
+            RecyclerViewViewModel {
+            override val id: String
+                get() = name
+        }
+
+        inner class RepeatingQuestsAdapter :
+            BaseRecyclerViewAdapter<RepeatingQuestViewModel>(R.layout.item_onboard_repeating_quest) {
+
+            override fun onBindViewModel(
+                vm: RepeatingQuestViewModel,
+                view: View,
+                holder: SimpleViewHolder
+            ) {
+                view.rqName.text = vm.name
+                view.rqRepeatPattern.text = "${vm.repeatingQuest.repeatPattern.periodCount} x week"
+
+                view.rqIcon.backgroundTintList =
+                    ColorStateList.valueOf(colorRes(vm.repeatingQuest.color.androidColor.color500))
+                view.rqIcon.setImageDrawable(
+                    IconicsDrawable(view.context)
+                        .icon(vm.repeatingQuest.icon!!.androidIcon.icon)
+                        .colorRes(R.color.md_white)
+                        .paddingDp(3)
+                        .sizeDp(24)
+                )
             }
 
         }
