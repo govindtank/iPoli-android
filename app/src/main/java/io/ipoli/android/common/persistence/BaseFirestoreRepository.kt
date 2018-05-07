@@ -1,18 +1,22 @@
 package io.ipoli.android.common.persistence
 
 import android.content.SharedPreferences
+import android.os.Looper
 import com.crashlytics.android.Crashlytics
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import io.ipoli.android.quest.Entity
 import io.ipoli.android.tag.Tag
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.CoroutineStart
 import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.channels.SendChannel
 import kotlinx.coroutines.experimental.launch
 import org.threeten.bp.Instant
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.Executors
 import kotlin.coroutines.experimental.CoroutineContext
 import kotlin.reflect.KProperty
 
@@ -186,14 +190,15 @@ abstract class BaseEntityFirestoreRepository<E, out T>(
 
         val registration: ListenerRegistration?
         registration = entityReference
-            .addSnapshotListener { snapshot, error ->
+            .addSnapshotListener(
+                Executors.newSingleThreadExecutor(),
+                EventListener<DocumentSnapshot> { snapshot, error ->
+                    if (shouldNotSendData(error, channel)) return@EventListener
 
-                if (shouldNotSendData(error, channel)) return@addSnapshotListener
-
-                launch(coroutineContext) {
-                    channel.send(toEntityObject(snapshot!!.data!!))
-                }
-            }
+                    launch(coroutineContext, CoroutineStart.UNDISPATCHED) {
+                        channel.send(toEntityObject(snapshot!!.data!!))
+                    }
+                })
         mapChannelToRegistration(channel, registration)
         return channel
     }
@@ -222,14 +227,16 @@ abstract class BaseCollectionFirestoreRepository<E, out T>(
 
         val registration: ListenerRegistration?
         registration = documentReference(id)
-            .addSnapshotListener { snapshot, error ->
+            .addSnapshotListener(
+                Executors.newSingleThreadExecutor(),
+                EventListener<DocumentSnapshot> { snapshot, error ->
 
-                if (shouldNotSendData(error, channel)) return@addSnapshotListener
+                    if (shouldNotSendData(error, channel)) return@EventListener
 
-                launch(coroutineContext) {
-                    channel.send(toEntityObject(snapshot!!.data!!))
-                }
-            }
+                    launch(coroutineContext, CoroutineStart.UNDISPATCHED) {
+                        channel.send(toEntityObject(snapshot!!.data!!))
+                    }
+                })
         mapChannelToRegistration(channel, registration)
         return channel
     }
@@ -239,14 +246,16 @@ abstract class BaseCollectionFirestoreRepository<E, out T>(
         val registration: ListenerRegistration?
         registration = query
             .whereEqualTo("removedAt", null)
-            .addSnapshotListener { snapshot, error ->
+            .addSnapshotListener(
+                Executors.newSingleThreadExecutor(),
+                EventListener<QuerySnapshot> { snapshot, error ->
 
-                if (shouldNotSendData(error, channel)) return@addSnapshotListener
+                    if (shouldNotSendData(error, channel)) return@EventListener
 
-                launch(coroutineContext) {
-                    channel.send(toEntityObjects(snapshot!!.documents))
-                }
-            }
+                    launch(coroutineContext, CoroutineStart.UNDISPATCHED) {
+                        channel.send(toEntityObjects(snapshot!!.documents))
+                    }
+                })
         mapChannelToRegistration(channel, registration)
         return channel
     }

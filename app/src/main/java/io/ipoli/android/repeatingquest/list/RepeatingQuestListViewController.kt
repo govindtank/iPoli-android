@@ -152,7 +152,7 @@ class RepeatingQuestListViewController(args: Bundle? = null) :
                 progress.text = "${vm.completedCount}/${vm.allCount}"
             }
 
-            view.setOnClickListener {
+            view.onDebounceClick {
                 rootRouter.pushController(
                     RepeatingQuestViewController.routerTransaction(vm.id)
                 )

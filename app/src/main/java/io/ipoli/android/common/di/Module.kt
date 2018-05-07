@@ -181,6 +181,20 @@ class FirestoreRepositoryModule : RepositoryModule, Injects<Module> {
 
 }
 
+class Firestore {
+    companion object {
+        val instance: FirebaseFirestore by lazy {
+            return@lazy synchronized(Firestore::class){
+                FirebaseFirestore.getInstance().apply { lock() }
+            }
+        }
+
+        private fun FirebaseFirestore.lock() {
+            collection("config").document("db").update("locked", true)
+        }
+    }
+}
+
 interface AndroidModule {
     val layoutInflater: LayoutInflater
 
@@ -256,7 +270,8 @@ class MainAndroidModule(
 
     override val ratePopupScheduler get() = AndroidRatePopupScheduler()
 
-    override val database get() = FirebaseFirestore.getInstance()
+    override val database get() = Firestore.instance
+
 
     override val eventLogger = FirebaseEventLogger(firebaseAnalytics)
 

@@ -148,14 +148,14 @@ class AuthViewController(args: Bundle? = null) :
             SHOW_LOGIN -> {
                 renderLoginViews(view, state)
 
-                view.googleSignIn.setOnClickListener {
+                view.googleSignIn.onDebounceClick {
                     showLoader()
                     startActivityForResult(
                         startSignUpForProvider(AuthUI.IdpConfig.GoogleBuilder().build()),
                         RC_SIGN_IN
                     )
                 }
-                view.facebookSignIn.setOnClickListener {
+                view.facebookSignIn.onDebounceClick {
                     showLoader()
                     startActivityForResult(
                         startSignUpForProvider(AuthUI.IdpConfig.FacebookBuilder().build()),
@@ -163,7 +163,7 @@ class AuthViewController(args: Bundle? = null) :
                     )
                 }
 
-                view.anonymousSignUp.setOnClickListener {
+                view.anonymousSignUp.onDebounceClick {
                     showLoader()
                     FirebaseAuth.getInstance().signInAnonymously().addOnCompleteListener {
                         if (it.isSuccessful) {

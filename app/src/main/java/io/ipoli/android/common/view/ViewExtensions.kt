@@ -5,6 +5,9 @@ import android.support.constraint.Group
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.channels.actor
+import kotlinx.coroutines.experimental.delay
 
 /**
  * Created by Venelin Valkov <venelin@mypoli.fun>
@@ -68,3 +71,20 @@ val ViewGroup.children: List<View>
 
 fun ViewGroup.inflate(@LayoutRes layout: Int, attachToRoot: Boolean = false): View =
     LayoutInflater.from(context).inflate(layout, this, attachToRoot)
+
+object Debounce {
+
+    fun clickListener(action: suspend (View) -> Unit): View.OnClickListener {
+        val eventActor = actor<View>(UI) {
+            for (event in channel) {
+                action(event)
+                delay(400)
+            }
+            this.cancel()
+        }
+
+        return View.OnClickListener {
+            eventActor.offer(it)
+        }
+    }
+}
