@@ -138,7 +138,7 @@ class OnboardViewController(args: Bundle? = null) :
                 changeChildController(
                     view = view,
 //                    adapterPosition = state.adapterPosition,
-                    adapterPosition = 3,
+                    adapterPosition = 2,
                     animate = false
                 )
             }

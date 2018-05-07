@@ -31,19 +31,64 @@
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_loop="true" />
 
-    <ImageView
-        android:id="@+id/petHouse"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        app:layout_constraintVertical_bias="0.65"
         app:layout_constraintBottom_toBottomOf="@+id/petBackground"
         app:layout_constraintEnd_toEndOf="@+id/petBackground"
         app:layout_constraintHeight_percent="0.4"
+        app:layout_constraintVertical_bias="0.65"
         app:layout_constraintStart_toStartOf="@+id/petBackground"
-        app:layout_constraintTop_toTopOf="@+id/petBackground"
-        app:srcCompat="@drawable/ic_doghouse" />
+        app:layout_constraintTop_toTopOf="@+id/petBackground">
+
+        <ImageView
+            android:id="@+id/petHouse"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_doghouse" />
+
+        <ImageView
+            android:id="@+id/selectedPet"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:adjustViewBounds="false"
+            android:cropToPadding="false"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/petHouse"
+            app:layout_constraintStart_toStartOf="@+id/petHouse"
+            app:layout_constraintTop_toBottomOf="@+id/guideline15"
+            app:layout_constraintVertical_bias="0.51"
+            app:srcCompat="@drawable/challenge_category_pet_3" />
+
+        <ImageView
+            android:id="@+id/petNameBackground"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="32dp"
+            android:adjustViewBounds="true"
+            android:cropToPadding="true"
+            app:layout_constraintBottom_toTopOf="@+id/guideline15"
+            app:layout_constraintEnd_toEndOf="@+id/petHouse"
+            app:layout_constraintStart_toStartOf="@+id/petHouse"
+            app:layout_constraintTop_toTopOf="@+id/petHouse"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/ic_pet_name_background" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
+
+
+
+    </android.support.constraint.ConstraintLayout>
+
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/petSun"
@@ -61,30 +106,8 @@
         app:layout_constraintVertical_bias="0.0"
         app:lottie_loop="true" />
 
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="@+id/petHouse"
-        app:layout_constraintEnd_toEndOf="@+id/petHouse"
-        app:layout_constraintHeight_percent="0.6"
-        app:layout_constraintStart_toStartOf="@+id/petHouse"
-        app:srcCompat="@drawable/challenge_category_pet_3" />
 
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        app:layout_constraintEnd_toEndOf="@+id/petHouse"
-        app:layout_constraintStart_toStartOf="@+id/petHouse"
-        app:layout_constraintTop_toTopOf="@+id/petHouse"
-        app:srcCompat="@drawable/ic_pet_name_background" />
+
 
 
 </android.support.constraint.ConstraintLayout>
